@@ -1,10 +1,10 @@
 #ifndef NHECLIENT_H
 #define NHECLIENT_H
 
-#include <QtGui/QWidget>
+#include <QtGui/QMainWindow>
 #include "ui_nheclient.h"
 
-class NHEClient : public QWidget
+class NHEClient : public QMainWindow
 {
     Q_OBJECT
 
