@@ -1,7 +1,7 @@
 #include "nheclient.h"
 
 NHEClient::NHEClient(QWidget *parent)
-    : QWidget(parent)
+    : QMainWindow(parent)
 {
 	ui.setupUi(this);
 }

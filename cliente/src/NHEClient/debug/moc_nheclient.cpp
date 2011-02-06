@@ -1,7 +1,7 @@
 /****************************************************************************
 ** Meta object code from reading C++ file 'nheclient.h'
 **
-** Created: Wed 2. Feb 14:48:38 2011
+** Created: Sat Feb 5 21:49:27 2011
 **      by: The Qt Meta Object Compiler version 62 (Qt 4.7.0)
 **
 ** WARNING! All changes made in this file will be lost!
@@ -38,7 +38,7 @@ static const char qt_meta_stringdata_NHEClient[] = {
 };
 
 const QMetaObject NHEClient::staticMetaObject = {
-    { &QWidget::staticMetaObject, qt_meta_stringdata_NHEClient,
+    { &QMainWindow::staticMetaObject, qt_meta_stringdata_NHEClient,
       qt_meta_data_NHEClient, 0 }
 };
 
@@ -56,12 +56,12 @@ void *NHEClient::qt_metacast(const char *_clname)
     if (!_clname) return 0;
     if (!strcmp(_clname, qt_meta_stringdata_NHEClient))
         return static_cast<void*>(const_cast< NHEClient*>(this));
-    return QWidget::qt_metacast(_clname);
+    return QMainWindow::qt_metacast(_clname);
 }
 
 int NHEClient::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
 {
-    _id = QWidget::qt_metacall(_c, _id, _a);
+    _id = QMainWindow::qt_metacall(_c, _id, _a);
     if (_id < 0)
         return _id;
     return _id;

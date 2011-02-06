@@ -28,7 +28,7 @@
 				</dictionary>
 				<dictionary>
 					<key>org.eclipse.cdt.make.core.build.command</key>
-					<value>mingw32-make</value>
+					<value>make</value>
 				</dictionary>
 				<dictionary>
 					<key>org.eclipse.cdt.make.core.build.target.auto</key>
@@ -60,7 +60,7 @@
 				</dictionary>
 				<dictionary>
 					<key>org.eclipse.cdt.make.core.environment</key>
-					<value>QMAKESPEC=win32-g++|PATH=c:\\Qt\\2010.05\\qt\\bin\\;${env_var:PATH}|</value>
+					<value>QMAKESPEC=win32-g++|PATH=/usr/bin:${env_var:PATH}:${env_var:PATH}:c:\\Qt\\2010.05\\qt\\bin\\;${env_var|</value>
 				</dictionary>
 				<dictionary>
 					<key>org.eclipse.cdt.make.core.stopOnError</key>
