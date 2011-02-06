@@ -1,29 +1,140 @@
-<ui version="4.0" >
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
  <class>NHEClientClass</class>
- <widget class="QMainWindow" name="NHEClientClass" >
-  <property name="geometry" >
+ <widget class="QMainWindow" name="NHEClientClass">
+  <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
     <width>800</width>
-    <height>600</height>
+    <height>258</height>
    </rect>
   </property>
-  <property name="windowTitle" >
+  <property name="windowTitle">
    <string>MainWindow</string>
   </property>
-  <widget class="QWidget" name="centralwidget" />
-  <widget class="QMenuBar" name="menubar" >
-   <property name="geometry" >
+  <widget class="QWidget" name="centralwidget">
+   <layout class="QHBoxLayout" name="horizontalLayout">
+    <item>
+     <layout class="QGridLayout" name="gridLayout">
+      <item row="0" column="0">
+       <widget class="QLabel" name="label">
+        <property name="text">
+         <string>TextLabel</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="0">
+       <widget class="QTreeWidget" name="treeWidget">
+        <column>
+         <property name="text">
+          <string notr="true">1</string>
+         </property>
+        </column>
+       </widget>
+      </item>
+      <item row="1" column="1">
+       <widget class="QListWidget" name="listWidget"/>
+      </item>
+      <item row="0" column="1">
+       <widget class="QLabel" name="label_2">
+        <property name="text">
+         <string>TextLabel</string>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="0">
+       <layout class="QHBoxLayout" name="horizontalLayout_2">
+        <item>
+         <widget class="QPushButton" name="pushButton">
+          <property name="text">
+           <string>PushButton</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="pushButton_3">
+          <property name="text">
+           <string>PushButton</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="pushButton_2">
+          <property name="text">
+           <string>PushButton</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+     </layout>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
      <width>800</width>
-     <height>21</height>
+     <height>25</height>
     </rect>
    </property>
+   <widget class="QMenu" name="menuArquivo">
+    <property name="title">
+     <string>&amp;Arquivo</string>
+    </property>
+    <addaction name="actionAtualizar"/>
+   </widget>
+   <widget class="QMenu" name="menuAjuda">
+    <property name="title">
+     <string>&amp;Projetos</string>
+    </property>
+    <addaction name="actionNovo_Projeto"/>
+    <addaction name="actionInscrever_se"/>
+   </widget>
+   <widget class="QMenu" name="menuAjuda_2">
+    <property name="title">
+     <string>A&amp;juda</string>
+    </property>
+    <addaction name="separator"/>
+    <addaction name="actionSobre_QT"/>
+    <addaction name="actionSobre_NHE"/>
+   </widget>
+   <addaction name="menuArquivo"/>
+   <addaction name="menuAjuda"/>
+   <addaction name="menuAjuda_2"/>
   </widget>
-  <widget class="QStatusBar" name="statusbar" />
+  <widget class="QStatusBar" name="statusbar"/>
+  <action name="actionSobre_QT">
+   <property name="text">
+    <string>Sobre &amp;QT</string>
+   </property>
+  </action>
+  <action name="actionSobre_NHE">
+   <property name="text">
+    <string>Sobre &amp;NHE</string>
+   </property>
+  </action>
+  <action name="actionAtualizar">
+   <property name="text">
+    <string>Atualizar</string>
+   </property>
+   <property name="statusTip">
+    <string>Atualizar os dados</string>
+   </property>
+  </action>
+  <action name="actionNovo_Projeto">
+   <property name="text">
+    <string>&amp;Novo Projeto</string>
+   </property>
+  </action>
+  <action name="actionInscrever_se">
+   <property name="text">
+    <string>&amp;Inscrever-se</string>
+   </property>
+  </action>
  </widget>
  <resources/>
  <connections/>

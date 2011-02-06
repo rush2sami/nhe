@@ -1,15 +1,15 @@
 /****************************************************************************
-** Meta object code from reading C++ file 'nheserver.h'
+** Meta object code from reading C++ file 'nheviewproject.h'
 **
-** Created: Sat Feb 5 22:31:12 2011
+** Created: Sat Feb 5 22:51:11 2011
 **      by: The Qt Meta Object Compiler version 62 (Qt 4.7.0)
 **
 ** WARNING! All changes made in this file will be lost!
 *****************************************************************************/
 
-#include "../nheserver.h"
+#include "../project/nheviewproject.h"
 #if !defined(Q_MOC_OUTPUT_REVISION)
-#error "The header file 'nheserver.h' doesn't include <QObject>."
+#error "The header file 'nheviewproject.h' doesn't include <QObject>."
 #elif Q_MOC_OUTPUT_REVISION != 62
 #error "This file was generated using the moc from 4.7.0. It"
 #error "cannot be used with the include files from this version of Qt."
@@ -17,7 +17,7 @@
 #endif
 
 QT_BEGIN_MOC_NAMESPACE
-static const uint qt_meta_data_NHEServer[] = {
+static const uint qt_meta_data_NHEViewProject[] = {
 
  // content:
        5,       // revision
@@ -33,33 +33,33 @@ static const uint qt_meta_data_NHEServer[] = {
        0        // eod
 };
 
-static const char qt_meta_stringdata_NHEServer[] = {
-    "NHEServer\0"
+static const char qt_meta_stringdata_NHEViewProject[] = {
+    "NHEViewProject\0"
 };
 
-const QMetaObject NHEServer::staticMetaObject = {
-    { &QWidget::staticMetaObject, qt_meta_stringdata_NHEServer,
-      qt_meta_data_NHEServer, 0 }
+const QMetaObject NHEViewProject::staticMetaObject = {
+    { &QWidget::staticMetaObject, qt_meta_stringdata_NHEViewProject,
+      qt_meta_data_NHEViewProject, 0 }
 };
 
 #ifdef Q_NO_DATA_RELOCATION
-const QMetaObject &NHEServer::getStaticMetaObject() { return staticMetaObject; }
+const QMetaObject &NHEViewProject::getStaticMetaObject() { return staticMetaObject; }
 #endif //Q_NO_DATA_RELOCATION
 
-const QMetaObject *NHEServer::metaObject() const
+const QMetaObject *NHEViewProject::metaObject() const
 {
     return QObject::d_ptr->metaObject ? QObject::d_ptr->metaObject : &staticMetaObject;
 }
 
-void *NHEServer::qt_metacast(const char *_clname)
+void *NHEViewProject::qt_metacast(const char *_clname)
 {
     if (!_clname) return 0;
-    if (!strcmp(_clname, qt_meta_stringdata_NHEServer))
-        return static_cast<void*>(const_cast< NHEServer*>(this));
+    if (!strcmp(_clname, qt_meta_stringdata_NHEViewProject))
+        return static_cast<void*>(const_cast< NHEViewProject*>(this));
     return QWidget::qt_metacast(_clname);
 }
 
-int NHEServer::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
+int NHEViewProject::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
 {
     _id = QWidget::qt_metacall(_c, _id, _a);
     if (_id < 0)
