@@ -5,14 +5,8 @@ QT += core \
     sql \
     network \
     opengl
-HEADERS += aboutnhe/nheabout.h \
-    project/nheviewproject.h \
-    nheclient.h
-SOURCES += aboutnhe/nheabout.cpp \
-    project/nheviewproject.cpp \
-    nheclient.cpp \
+HEADERS += nheclient.h
+SOURCES += nheclient.cpp \
     main.cpp
-FORMS += aboutnhe/nheabout.ui \
-    project/nheviewproject.ui \
-    nheclient.ui
+FORMS += nheclient.ui
 RESOURCES += 

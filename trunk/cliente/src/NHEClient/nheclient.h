@@ -3,7 +3,7 @@
 
 #include <QtGui/QMainWindow>
 #include "ui_nheclient.h"
-#include "aboutnhe/nheabout.h"
+
 
 class NHEClient : public QMainWindow
 {
@@ -15,7 +15,6 @@ public:
 
 private:
     Ui::NHEClientClass ui;
-    NHEAbout* nheAbout;
 };
 
 #endif // NHECLIENT_H
