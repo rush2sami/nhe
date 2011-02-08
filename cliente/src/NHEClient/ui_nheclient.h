@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'nheclient.ui'
 **
-** Created: Sat Feb 5 22:48:42 2011
+** Created: Tue Feb 8 16:53:16 2011
 **      by: Qt User Interface Compiler version 4.7.0
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
