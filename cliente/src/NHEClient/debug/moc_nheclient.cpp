@@ -1,7 +1,7 @@
 /****************************************************************************
 ** Meta object code from reading C++ file 'nheclient.h'
 **
-** Created: Tue Feb 8 16:53:49 2011
+** Created: Tue Feb 8 22:36:03 2011
 **      by: The Qt Meta Object Compiler version 62 (Qt 4.7.0)
 **
 ** WARNING! All changes made in this file will be lost!
