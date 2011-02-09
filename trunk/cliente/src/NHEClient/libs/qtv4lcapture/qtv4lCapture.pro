@@ -4,7 +4,39 @@ LIBS += -lv4l2 \
     -lavformat \
     -lswscale \
     -lm
-HEADERS += ../OpenCV-2.2.0/3rdparty/include/cblas.h \
+HEADERS += capturethread.h \
+    mainwidget.h \
+    microphone.h \
+    videolibi/QVideoDecoder.h \
+    videolibi/QVideoEncoder.h \
+    videolibi/ffmpeg.h \
+    videowidget.h \
+    ../sim-2.1/include/sim/analysis.h \
+    ../sim-2.1/include/sim/clock.h \
+    ../sim-2.1/include/sim/conditionallist.h \
+    ../sim-2.1/include/sim/control.h \
+    ../sim-2.1/include/sim/converter.h \
+    ../sim-2.1/include/sim/coutanalysis.h \
+    ../sim-2.1/include/sim/defs.h \
+    ../sim-2.1/include/sim/entity.h \
+    ../sim-2.1/include/sim/error.h \
+    ../sim-2.1/include/sim/event.h \
+    ../sim-2.1/include/sim/generator.h \
+    ../sim-2.1/include/sim/handlers.h \
+    ../sim-2.1/include/sim/histogram.h \
+    ../sim-2.1/include/sim/hush.h \
+    ../sim-2.1/include/sim/query.h \
+    ../sim-2.1/include/sim/queue.h \
+    ../sim-2.1/include/sim/reports.h \
+    ../sim-2.1/include/sim/resource.h \
+    ../sim-2.1/include/sim/scheduler.h \
+    ../sim-2.1/include/sim/screen.h \
+    ../sim-2.1/include/sim/sim.h \
+    ../sim-2.1/include/sim/simevent.h \
+    ../sim-2.1/include/sim/simulation.h \
+    ../sim-2.1/include/sim/tertiarytree.h \
+    ../sim-2.1/include/sim/version.h \
+    ../OpenCV-2.2.0/3rdparty/include/cblas.h \
     ../OpenCV-2.2.0/3rdparty/include/clapack.h \
     ../OpenCV-2.2.0/3rdparty/include/f2c.h \
     ../OpenCV-2.2.0/3rdparty/include/ffmpeg_/libavcodec/avcodec.h \
@@ -316,7 +348,56 @@ HEADERS += ../OpenCV-2.2.0/3rdparty/include/cblas.h \
     videowidget.h \
     mainwidget.h \
     microphone.h
-SOURCES += ../OpenCV-2.2.0/3rdparty/lapack/dasum.c \
+SOURCES += capturethread.cpp \
+    main.cpp \
+    mainwidget.cpp \
+    microphone.cpp \
+    videolibi/QVideoEncoder.cpp \
+    videowidget.cpp \
+    ../sim-2.1/examples/airport-ev.c \
+    ../sim-2.1/examples/airport.c \
+    ../sim-2.1/examples/altbit-ev.c \
+    ../sim-2.1/examples/altbit.c \
+    ../sim-2.1/examples/bank-ev.c \
+    ../sim-2.1/examples/bank.c \
+    ../sim-2.1/examples/csma-cd.c \
+    ../sim-2.1/examples/harbour-ev.c \
+    ../sim-2.1/examples/harbour.c \
+    ../sim-2.1/examples/job-sc.c \
+    ../sim-2.1/examples/jobshop.c \
+    ../sim-2.1/examples/philo-ev.c \
+    ../sim-2.1/examples/philo-sc.c \
+    ../sim-2.1/examples/philosopher.c \
+    ../sim-2.1/examples/post-ev.c \
+    ../sim-2.1/examples/post.c \
+    ../sim-2.1/examples/reliability.c \
+    ../sim-2.1/examples/tankstation.c \
+    ../sim-2.1/hamburgershop/client-hamburgershop.c \
+    ../sim-2.1/hamburgershop/server-hamburgershop.c \
+    ../sim-2.1/src/analysis.c \
+    ../sim-2.1/src/clock.c \
+    ../sim-2.1/src/colist.c \
+    ../sim-2.1/src/control.c \
+    ../sim-2.1/src/coutanal.c \
+    ../sim-2.1/src/entity.c \
+    ../sim-2.1/src/error.c \
+    ../sim-2.1/src/generate.c \
+    ../sim-2.1/src/handlers.c \
+    ../sim-2.1/src/histo.c \
+    ../sim-2.1/src/old-queue.c \
+    ../sim-2.1/src/query.c \
+    ../sim-2.1/src/queue.c \
+    ../sim-2.1/src/reports.c \
+    ../sim-2.1/src/resource.c \
+    ../sim-2.1/src/schedule.c \
+    ../sim-2.1/src/screen.c \
+    ../sim-2.1/src/simevent.c \
+    ../sim-2.1/src/simul.c \
+    ../sim-2.1/src/tytree.c \
+    ../sim-2.1/tests/testdistributions.c \
+    ../sim-2.1/tests/testgenerator.c \
+    ../sim-2.1/tests/testqueues.c \
+    ../OpenCV-2.2.0/3rdparty/lapack/dasum.c \
     ../OpenCV-2.2.0/3rdparty/lapack/daxpy.c \
     ../OpenCV-2.2.0/3rdparty/lapack/dbdsdc.c \
     ../OpenCV-2.2.0/3rdparty/lapack/dbdsqr.c \
@@ -1323,6 +1404,7 @@ DEFINES += __STDC_CONSTANT_MACROS
 SUBDIRS = videolibi
 INCLUDEPATH += videolibi
 FORMS += mainwidget.ui \
+    mainwidget.ui \
     mainwidget.ui \
     mainwidget.ui
 QT += multimedia
