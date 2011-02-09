@@ -1,0 +1,203 @@
+.TH EVENT 2
+.SH NAME
+   event.
+.SH SYNOPSIS
+.nf
+interface event 
+{
+protected :
+  event(int qp=0,int sp=0,int kf = FALSE);   // constructor
+
+public :
+  virtual ~event();  // destructor.
+
+  virtual int operator()() = 0;  // abstract.
+
+  virtual int verify();  // abstract
+
+  int report(histogram* h,double interval = 0); // generate report
+
+  void stamp();           // add time stamp.
+  double timespent();     // return time since the stamp.
+
+  int queuingpriority();           // return queuing priority.
+  void queuingpriority(int p);     // adjust queuing priority.
+  int schedulingpriority();        // return scheduling priority.
+  void schedulingpriority(int p);  // adjust scheduling priority.
+
+  int active();          // is active ?
+  int pending();         // is pending ?
+  int conditional();     // is conditional ?
+  int closed();          // is closed ?
+  int passive();         // is passive ?
+  int queued();          // is queued ?
+};
+.fi
+.SH DESCRIPTION
+The event object models the dynamic components the simulation 
+is made of. The constructor gets the queuing and scheduling priorities
+(default 0) of the event. The kill flag (default FALSE) can be set
+to OK, if so the termination count that was set in the simulation::run
+method decreases when this event is terminated and the simulation possibly stops.
+The operator()() function is the function that is invoked, 
+if the event is activated. This function is abstract, implementation
+should be in the subtype, derived from event. 
+The function verify returns OK. This function is invoked in the
+simulation::cancel and the queue::cancel methods. If the method
+returns FALSE (a subtype should have overwritten the function)
+the event will be removed and terminated when the cancel
+method is invoked and the event is in the scheduler, conditional list
+or in the queue. 
+The method report fills 
+a FREQUENCY histogram with samples of the lifetime of each instance of 
+the event. Each event receives a life time stamp when reported and is
+sampled when it is terminated (and has a report).
+The histogram is printed to standard output and on its window (if the
+library runs in HUSH mode), each 'interval' time units.
+Is 'interval' equal to 0 (default), then the histogram will be printed
+at the end of the simulation. The method stamp sets the time stamp of 
+the event to the current simulation time. The method timespent returns
+the time since the event received a stamp. If combined these two methods
+can be used to gather statistics of for example service times. 
+The method queuingriority returns or adjusts the 
+queuing priority of the event. It is used to model priority queues. 
+The scheduling priority members return or adjust the scheduling
+priority of the event. This priority orders the activation of events
+with the same activation time and of conditional events. The event with
+the highest scheduling priority is activated first. The other functions 
+return a boolean, according to the state of the event.
+.SH EXAMPLE
+.nf
+#include <sim/sim.h>
+
+simulation* sim;
+histogram* h;
+resource* loket;
+queue* q;
+
+class arrival : public event
+{
+public :
+  arrival();
+  virtual int operator()();
+private :
+  generator* g;
+};
+
+class departure : public event
+{
+public :
+  departure(arrival* arr);
+  virtual int operator()();
+private :
+  arrival* a;
+};
+
+class service : public event
+{
+public :
+  service();
+  virtual int operator()();
+private :
+  generator* g;
+};
+
+arrival::arrival() : event()
+{
+  g = new generator(34,25,300);
+}
+
+int arrival::operator()()
+{
+  arrival* a = new arrival();
+  sim -> schedule(a,(g -> exponential(0.6)));  // next arrival
+  report(h);                // report arrival.
+  q -> append(this);        // append to queue.
+  return OK;
+}
+
+departure::departure(arrival* arr) : event()
+{
+  a = arr;
+}
+
+int departure::operator()()
+{
+  loket -> release();          // release loket
+  sim -> terminate(a);         // terminate arrival
+  sim -> terminate(this);      // terminate departure
+  return OK;
+}
+
+service::service() : event()
+{
+  g = new generator(4,2500,30);
+}
+
+int service::operator()()
+{
+  while ( (!(q -> empty())) && (loket -> available()) )
+  {
+    arrival* a = (arrival *)q -> removefront();    // get first
+    loket -> acquire();                   // acquire loket
+    departure* d = new departure(a);      // schedule departure
+    sim -> schedule(d,g -> exponential(0.5));
+  }
+  return OK;
+}
+    
+
+class application : public session
+{
+public :
+  application(int argc,char** argv);
+  virtual int main(kit* tk,int argc,char** argv);
+};
+ 
+application::application(int argc,char** argv) : session(argc,argv,"M/M/1-queue")
+{
+}
+ 
+int application::main(kit* tk,int argc,char* argv[])
+{
+  sim = new simulation();
+  h = new histogram("-start 0.5 -columnwidth 0.5 -title timespent");
+  q = new queue();
+  loket = new resource(1);
+
+  arrival* a = new arrival(); // initially a customer arrives
+  sim -> schedule(a,0.0);
+  service* s = new service(); // and the service is made conditional
+  sim -> hold(s);
+  sim -> run(80.0);           // start
+  delete h;
+  delete q;
+  delete sim;
+  return 0;
+}
+ 
+// create and start the session
+ 
+int main(int argc,char** argv)
+{
+  session* s = new application(argc,argv);
+  s -> run();
+  exit(0);
+}
+.nf
+.SH REMARKS
+An event-based M/M/1 queue. The arrival event models the arrival
+of customers, a new arrival is scheduled, a report is made and
+the arrival is appended to the queue. The service event takes
+arrival events, acquires the loket and schedules a departure
+event. The departure event releases the loket and terminates itself.
+Notice that an arrival event has a report, so it must be
+terminated, when the customer departs, otherwise no samples will
+be recorded in the histogram. Furthermore, the service
+event is made conditional and is never passivated, so it exists
+for the entire simulation and is invoked whenever a arrival or
+departure event fires. 
+See entity for a process-oriented M/M/1 queue.
+.SH SEE ALSO
+entity(6), simulation(6), resource(6), queue(6),
+generator(6), histogram(6).

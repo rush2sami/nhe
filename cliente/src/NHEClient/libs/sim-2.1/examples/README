@@ -1,0 +1,9 @@
+This directory contains a variety of example programs. Some are 
+event-based as well as process- oriented and some have have a 
+grafical interface. 
+All programs can be linked to both the ASCII and the HUSH version of
+the library. The ASCII library is faster as the HUSH library,
+but has no grafical features.
+If you want to link a program to the ASCII library include the 
+ascii.mk file in your makefile, if you want to link it to the HUSH
+version include the resource.mk file.

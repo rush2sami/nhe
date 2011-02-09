@@ -1,0 +1,47 @@
+.TH QUERY 2
+.SH NAME
+   query.
+.SH SYNOPSIS
+.nf
+interface query : public screen
+{
+  query(char* p,char* options = "");
+  query(widget* w,char* p,char* options = "");
+  virtual ~query();
+
+  void text(char* txt);     // set text parameter
+
+  char* get();              // get value
+};
+.fi
+.SH DESCRIPTION
+The query widget consists of a text part, an entry and an OK button.
+It is derived from screen so the widget can be scaled
+by adjusting the width and height. 
+The value returned by the get method is the value that was in the entry
+widget when the OK button was pressed.
+scale widget.
+.SH OPTIONS
+.nf
+  -foreground <color = black>
+  -background <color = lightblue>
+  -text <string = input>
+  -width <coord = 160>    // width/160 == height/80
+  -height <coord = 80>
+.fi
+.SH EXAMPLE
+.nf
+  toplevel* t = new toplevel(".query");
+  query* q = new query(t,".q");
+  tk -> pack(q);
+  tk -> update();
+  do
+    char* val = q -> get();
+  while (!val);
+  duration = atof(val);
+.fi
+.SH REMARKS
+A query is created (in application::main) and the program waits until
+duration is given.
+.SH SEE ALSO
+kit(4), toplevel(5), screen(6)

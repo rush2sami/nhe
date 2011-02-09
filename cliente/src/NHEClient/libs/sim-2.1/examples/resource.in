@@ -1,0 +1,11 @@
+LIBDIRS = -L$(HUSH)/lib -R$(HUSH)/lib
+
+OTHERS = -lsim 
+CFLAGS = -g  -I$(HUSH)/include $(SYSTEMFLAGS)
+LDFLAGS = $(LIBDIRS) $(HUSHLIBS) $(OTHERS) $(TKLIBS) \
+	  $(SYSTEMLIBS)
+
+
+.SUFFIXES: .out
+.c.out:
+	$(CC) -o $*.out $*.c $(CFLAGS) $(LDFLAGS) 

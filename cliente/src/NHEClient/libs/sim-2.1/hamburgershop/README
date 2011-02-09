@@ -1,0 +1,37 @@
+A hamburger shop
+
+This directory contains a server and a client for a distributed 
+interactive game.
+
+- client-hamburgershop.c
+
+This program implements the client part of a distributed interactive
+game. The rules of the game are given when starting up the client so
+they won't be given here. The interesting part of the program is the
+scheduling of clients. At certain points in time clients are
+scheduled and send their internal state to the server which returns
+an overview of the states of all clients that participate and some
+variables that affect the game (as the weather). After one run the
+client sends stopping messages until it receives an unblocking message
+and a new run can start. The client and server use datagrams and timers
+as way of communicating as some lost messages won't do harm.
+
+- server-hamburgershop.c
+
+The server keeps a sorted list of clients. Every time a client sends
+a message the server looks if this client allready exists (in the list).
+If so its data is updated, if not the client is added to the list. If
+the client sent a stopping message the server returns an unblocking
+message if all clients are stopped and a blocking message if not.
+If the client just sent its internal state the server returns a message
+with the sorted list of all clients and with global information as
+the weather. This information can be set in the server its menu. The
+server reads the hush::kit each time a receive has timed out. The
+reset button will cause the server to throw away its clients so
+blocked clients don't have to wait on a client that (for example) is
+on a host that is down.
+
+- setting up the game
+
+The game can easily be set up by giving the host you run the server on
+to the client when starting the client.

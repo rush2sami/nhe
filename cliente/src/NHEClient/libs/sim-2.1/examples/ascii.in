@@ -1,0 +1,14 @@
+
+
+SIM = $(HUSH)
+LIBDIRS = -L$(SIM)/lib -R$(SIM)/lib 
+ 
+CFLAGS= -g -I. -DASCII -I$(SIM)/include
+ 
+LDFLAGS =  $(LIBDIRS) -lasim -lm
+
+OBJECTS=
+
+.SUFFIXES: .c .o .out
+.c.o:; $(CC) $(CFLAGS) -c $*.c
+.c.out:; $(CC) $(CFLAGS) $(OBJECTS) $*.c -o $*.out $(LDFLAGS)

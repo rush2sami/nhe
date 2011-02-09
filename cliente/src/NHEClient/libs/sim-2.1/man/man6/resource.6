@@ -1,0 +1,75 @@
+.TH RESOURCE 2
+.SH NAME
+   resource
+.SH SYNOPSIS
+.nf
+interface resource 
+{
+  resource(double am);         // constructor.
+
+  int report(histogram* h,double interval = 0);  // generate report.
+
+  void reset();               // reset amount left to initial.
+
+  void release(double am = 1);     // release amount left by am.
+  void acquire(double am = 1);     // acquire am from amount left.
+
+  int available(double am = 1);    // is am available ?
+
+  int full();                 // is full ?
+  int empty();                // is empty ?
+  double left();               // how much left ?
+  double used();               // how much used ?
+  double occupied();           // returns occupation (%).
+
+  friend ostream& operator<<(ostream& os,resource& r);
+};
+.fi
+.SH DESCRIPTION
+A resource models a static object in the system, that events or
+entitys can use. When a resource is created the current and 
+initial amount are set to am. When report is used, the given
+histogram is filled with samples of the occupation of the resource.
+Samples are taken each time release or acquire is invoked.
+The histogram should be of type WEIGHTED. Furthermore, the histogram
+is printed each 'interval' time units. If 'interval' is equal to 0 (the default),
+the histogram is printed only at the end of the simulation.
+Reset can be used to reset the current amount to the initial. 
+With the method release an amount am of the resource is set free, 
+with acquire an amount am is claimed. Before acquiring an amount 
+am, available should be used to check if this is legal. Full 
+returns TRUE if the resource is full (i.e. as if had just been created)
+and FALSE otherwise. Empty returns TRUE if the amount left is equal to
+zero. Left returns the amount left, that can 
+be acquired. Used returns the amount, that already has been acquired. 
+Occupied returns the occupation of the resource in procents. A resource 
+can be written to standard output with the overloaded operator<< 
+function. The initial and current amount and the occupation are printed.
+.SH EXAMPLE
+.nf
+int application::main(kit* tk,int argc,char* argv[])
+{
+  resource* r = new resource(10);
+  generator* g = new generator(5);
+  double am = g -> uniform(0,4);
+  cout << (*r);
+  while (r -> available(am))
+  {
+    r -> acquire(am);
+    cout << (*r);
+    if (g -> probability(r -> occupied()/100));
+      r -> release();
+    am = g -> uniform(0,4);
+  }
+  cout << (*r);
+  cout << endl << "amount required :" << am << endl;
+  return 0;
+}
+.fi
+.SH REMARKS
+A resource, with an initial amount of 10 is created. If possible,
+an amount between 0 and 4 is required. The resource is released,
+with as probability the occupation, so this probability will
+increase as the amount left decreases.
+.SH SEE ALSO
+   generator(6).

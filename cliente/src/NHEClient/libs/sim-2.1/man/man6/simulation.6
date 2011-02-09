@@ -1,0 +1,153 @@
+.TH SIMULATION 2
+.SH NAME
+   simulation
+.SH SYNOPSIS
+.nf
+interface simulation 
+{
+  simulation();
+  virtual ~simulation();
+
+  void run();                      // run until no events left
+  void run(double t);              // run for t time units.
+  void run(int count);             // run for count terminated events
+
+  void quit();                     // quit simulation.
+
+  void terminate(event* e);        // terminate e.
+
+  int schedule(event* e,double t); // schedule e at t.
+  int wait(double t);              // schedule current.
+  int passivate(event* e);         // passivate e.
+  int activate(event* e);          // activate e.
+  int hold(event* e);              // add e to conditional.
+  int withdraw(event* e);          // put e on closed.
+  int reinstate(event* e);         // put e on conditional.
+
+  int cancel();                    // cancel specified events
+
+  void reset();                    // reset the simulation.
+
+  double clock();                  // return clock.
+
+  void init(char* options = "");   // initialize
+
+  screen* format(char* p,char* options = "");  // format
+  screen* format(widget* w,char* p,char* options = "");
+
+  void postscript(char* fn);       // generate postscript.
+
+  friend ostream& operator<<(ostream& os,simulation& s);
+};
+.fi
+.SH DESCRIPTION
+The simulation object maintains the simulation clock, the scheduler and 
+conditional list of the events. It should be created before creating
+the other objects that participate in the program.
+Run is used to run the simulation until no scheduled events are left,
+for t time units or for count terminated events. 
+The simulation can be stopped with quit. Terminate will destroy the
+memory used by the event. If the kill flag is set in the constructor
+of the event and the simulation
+runs for count events, it decreases the termination count. If this
+count finally is equal to 0, the simulation stops. If schedule is used, event e is 
+put on the pending list and is executed after t time units. If wait 
+is used the current is put on the pending list and is executed after 
+t time units. Passivate extracts e from the pending or conditional 
+list and makes it passive.  Activate removes event e from the pending 
+and conditional list and schedules it to become active at the current 
+time. Hold adds event e to the conditional list. Withdraw 
+prevents a conditional event e from being scanned by chanching it's 
+state to closed.  Reinstate allows a conditional event e to be 
+scanned. Cancel removes and terminates all events from the
+conditional list and the scheduler that receive FALSE
+from their event::verify method. The number of terminated events
+is returned. The simulation can be reset by using reset. 
+The reset method resets the clock to 0, clears the scheduler and
+conditional list and resets the widgets and reports (if set) to their
+original state.
+Clock returns the current simulation time. 
+The init method takes as options realtime speed (default 0), scan 
+(default no) and suppress (default none).
+If the options take the speed argument the library runs in real
+time mode. A run ends if the simulation time divided by speed is greater
+then the actual time (in seconds) that elapsed.  
+Setting scan to yes means that conditional events are scanned, even between 
+events with the same activation time. If suppress is set generated
+reports and/or statistics are not printed after a run.
+The format methods format the screen used by the run method to print its
+statistics. If not set the run method creates a default toplevel widget.
+The method postscript writes the window of the simulation
+object (if created) in postscript format to the specified file.
+The library should run in HUSH mode then.
+The operator<< function writes the pending tree and conditional list 
+to standard output.
+.SH OPTIONS
+  // init
+  -realtime <double = 0>
+  -scan <yes,no>   // default no
+  -suppress <none,reports,statistics,both>  // default none
+
+  // format
+  -foreground <color = black>    
+  -background <color = white>
+  -width <coord = 400>          // width/400 == height/120
+  -height <coord = 120>
+.SH EXAMPLE
+.nf
+#include <sim/sim.h>
+
+generator* g;
+simulation* sim;
+
+class act : public entity
+{
+public :
+  act() : entity()
+    {;}
+  int operator()()
+  {
+    g = new generator((int)sim -> clock(),90,98);
+    double tm = g -> uniform(0,1);
+    sim -> passivate(this);
+    if (g -> probability(tm) < 0.2)
+      sim -> schedule(this,tm);
+    else if (g -> probability(tm) < 0.4)
+      sim -> hold(this);
+    cout << (*sim); 
+    return OK;
+  }
+};
+
+class application : public session
+{
+  application(int argc,char** argv) : session(argc,argv,"simulation")
+    {}
+  virtual int main(kit* tk,int argc,char** argv)
+  {
+    sim = new simulation();
+    g = new generator(0,234,9);
+    for (int i=0;i<10;i++)
+    {
+      act* a = new act();
+      sim -> schedule(a,g -> uniform(0,1));
+    }
+    sim -> run();
+    delete sim;
+    return 0;
+  }
+};
+
+main(int argc,char** argv)
+{
+  session* s = new application(argc,argv);
+  s -> run();
+  exit(0);
+}
+.fi
+.SH REMARKS
+Ten act object are scheduled. First they are passivated, then 
+scheduled again, made conditional or ignored, so finally they 
+will disappear. 
+.SH SEE ALSO
+   session(4), kit(4), entity(6), generator(6).

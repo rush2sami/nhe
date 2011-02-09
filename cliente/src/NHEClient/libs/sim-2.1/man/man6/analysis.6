@@ -1,0 +1,219 @@
+.TH ANALYSIS 2
+.SH NAME
+   analysis
+.SH SYNOPSIS
+.nf
+interface analysis 
+{
+  analysis(histogram* h) ; // taking histogram to analyze.
+  virtual ~analysis();     // destructor.
+
+  screen* format(char* p,char* options = ""); // format output
+  screen* format(widget* w,char* p,char* options = "");
+
+  double confidence(char* options = ""); // return confidence-interval.
+  double confidence(histogram* h,char* options = ""); // difference
+
+  double covariance(histogram* h2);    // covariance of h and h2
+  double correlation(histogram* h2);   // correlation of h and h2
+
+  double chisquaretest(double* expected); // chi-square test.
+
+  double linear();        // linear fit.
+  double linear(double a,double b);  
+  double quadratic();     // quadratic fit.
+  double quadratic(double a,double b,double c);  
+
+  double uniform();       // uniform fit.
+  double uniform(double a,double b);  
+  double exponential();   // exponential fit.
+  double exponential(double a);  
+  double hyperexponential(double p);   // hyperexponential fit.
+  double hyperexponential(double p,double a,double b);  
+  double laplace();       // laplace fit.
+  double laplace(double a);  
+  double gamma();         // gamma fit.
+  double gamma(double a,double b);  
+  double erlang();        // erlang fit.
+  double erlang(unsigned int n,double a);  
+  double binomial();      // binomial fit.
+  double binomial(double p,unsigned int n);  
+  double geometric();     // geometric fit.
+  double geometric(double p);  
+  double hypergeometric(unsigned int n);   // hypergeometric fit.
+  double hypergeometric(unsigned int m,unsigned int n,double p);  
+  double negativebinomial();   // negativebinomial fit.
+  double negativebinomial(double p,unsigned int n);  
+  double poisson();       // poisson fit.
+  double poisson(double a);  
+  double normal();        // normal fit.
+  double normal(double a,double b);  
+  double lognormal();     // lognormal fit.
+  double lognormal(double a,double b);  
+  double chisquare();     // chisquare fit.
+  double chisquare(unsigned int n);  
+  double student();       // student fit.
+  double student(unsigned int n);  
+  double beta();          // beta fit.
+  double beta(double a,double b);  
+  double fdistribution(); // fdistribution fit.
+  double fdistribution(unsigned int n,unsigned int m);  
+  double weibull();       // weibull fit.
+  double weibull(double a,double b);  
+  double triangular();    // triangular fit.
+  double triangular(double a);  
+
+  int steady(histogram* h,int n);  // report steady.
+
+  // theoretical values of queues with given arrival and service rate
+  int MM1size(double lb,double mu);
+  int MM1waitingtime(double lb,double mu);
+  int MMcsize(double lb,double mu,unsigned int c);
+  int MMcwaitingtime(double lb,double mu,unsigned int c);
+  int MD1size(double lb,double mu);
+  int MD1waitingtime(double lb,double mu);
+
+  void postscript(char* fn);  // generate postscript.
+};
+.fi
+.SH OPTIONS
+.nf
+  // confidence
+  -percent <level = 95>    // confidence level (90,95 or 99)
+
+  // format
+  -width <coord = 400>     // width/400 == height/100
+  -height <coord = 100>
+  -foreground <color = black>
+  -background <color = grey>
+  -plot <color = red>      // curve fitting
+.fi
+.SH DESCRIPTION
+The constructor takes the histogram to be analyzed. The format methods
+return a screen with the specified path if the library runs in hush
+mode. The results of invoking
+a method are printed to that screen. If format is not used before the
+printing a default toplevel screen is used. 
+The method confidence returns the confidence
+interval for the mean or difference of means. The functions covariance and
+correlation take a second histogram and calculate the covariance
+and correlation coefficient from the data written to their
+files. These files should then be created with the histogram::file
+method. The method
+chisquaretest takes an array of double and returns the
+chi-square probability (the chance that the statistic is
+greater then the calculated statistic), according to the values of the
+histogram. The output contains also the chi square
+statistic and degree of freedom. The methods linear and
+quadratic respectively fit a linear and quadratic curve on
+the histogram, the output contains the curves and
+the chi-square probability. The 'distribution' methods fit
+the according distributions on the histograms, the output
+contains the probability distribution function (pdf) and
+the chi-square probability. These methods calculate the parameters
+to the distribution if they don't receive parameters. Linear and quadratic
+use the method of the least squares, the distribution methods
+calculate the parameters from the mean and variance of the
+histogram data. Steady fills the histogram h with
+the moving averages of the histogram to be analyzed. 
+The moving averages are the recorded samples averaged over the 
+last n values. The histogram is printed
+to standard output, when the simulation stops. H should be
+of type SERIES. The queue methods compare the mean of the histogram
+with the theoretical value, given the arrival and service rate.
+A confidence interval is given and the method returns OK if the
+theoretical mean lies in the interval of the histogram mean.
+The postscript method writes the windows of the
+analysis object (if they exist) in postscript format to the
+specified file.
+.SH EXAMPLE 1
+.nf
+int application::main(kit* tk,int argc,char* argv[])
+{
+  simulation* sim = new simulation();
+  histogram* h1 = new histogram(".h1","-start 1 -title die");
+  histogram* h2 = new histogram(".h2","-start 1 -title die");
+  analysis* a = new analysis(h1);
+  generator* g1 = new generator(1,9,89);
+  generator* g2 = new generator(892,2,10);
+  for (int i=0;i<40;i++)
+  {
+    for (int j=0;j<100;j++)
+    {
+      int thrw = (int)g1 -> uniform(1,7);
+      h1 -> sample(thrw);         // add throw
+    }
+    for (j=0;j<75;j++)
+    {
+      int thrw = (int)g2 -> uniform(1,7);
+      h2 -> sample(thrw);         // add throw
+    }
+    cout << (*h1);
+    cout << (*h2);
+    int ok1 += ( abs(h1 -> mean() - 3.5) > a -> confidence("-percent 95") ) 
+    int ok2 += ( abs(h1 -> mean() - h2 -> mean()) > a -> confidence("-percent 95",h2); 
+    h1 -> reset();
+    h2 -> reset();
+  }
+  double perc = (double)ok1/40.0*100.0;
+  cout << endl << endl << "total ok mean : " << perc << "%" << endl;
+  if (perc >= 95.0)       // should be 95% or more
+    cout << "passed test" << endl;
+  else
+    cout << "didn't pass test" << endl;
+  perc = (double)ok2/40.0*100.0;
+  cout << endl << endl << "total ok difference: " << perc << "%" << endl;
+  if (perc >= 95.0)       // should be 95% or more
+    cout << "passed test" << endl;
+  else
+    cout << "didn't pass test" << endl;
+  delete a;
+  delete h1;
+  delete h2;
+  delete sim;
+  return 0;
+}
+.fi
+.SH REMARKS
+The method takes 100 samples of a fair(?) die and uses 
+the confidence member, with 3.5 as known mean, 0.0 as known 
+difference and 95 percent as confidence level, to analyze an 
+experiment. The resulting histogram objects are printed 
+and reset. If after 40 experiments the percentage of
+tests OK is greater or equal as 95.0, the die has passed 
+the test.
+.SH EXAMPLE 2
+.nf
+int application::main(kit* tk,int argc,char* argv[])
+{
+  simulation* sim = new simulation();
+  histogram* h1 = new histogram(".h1","-title curve");
+  histogram* h2 = new histogram(".h2","-title line");
+  analysis* a1 = new analysis(h1);
+  analysis* a2 = new analysis(h2);
+  for (int i=0;i<10;i++)
+  {
+    double val1 = 1.0*(i+0.5)*(i+0.5) - 2.5*(i+0.5) + 19.1;
+    double val2 = 8.5*(i+0.5) + 9.1;
+    h1 -> sample((i+0.5),val1);    // sample first curve
+    h2 -> sample((i+0.5),val2);    // sample second curve
+  }
+  a1 -> quadratic();            // fit curves
+  a1 -> linear();
+  a2 -> quadratic();
+  a2 -> linear();
+  cout << (*h1);
+  cout << (*h2);
+  delete a1;
+  delete a2;
+  delete h1;
+  delete h2;
+  delete sim;
+  return 0;
+}
+.fi
+.SH REMARKS
+The method fills two histograms and fits a linear as well as a
+quadratic curve on them.
+.SH SEE ALSO
+   simulation(6),generator(6),histogram(6),screen(6).

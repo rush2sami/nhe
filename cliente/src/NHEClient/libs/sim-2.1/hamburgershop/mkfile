@@ -1,0 +1,19 @@
+#link to the HUSH version
+include resource.mk
+
+#link to the ASCII version
+#include ascii.mk
+
+OBJECTS=
+
+SRC : sh = ls *.c
+
+OUT = ${SRC:.c=.out}
+
+all: $(OUT)
+
+test: $(OUT)
+
+clean:
+	rm -f *.o *.out
+	rm -f -r Templates.DB

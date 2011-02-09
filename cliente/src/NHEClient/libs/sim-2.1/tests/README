@@ -1,0 +1,97 @@
+The tests :
+
+Three tests can be performed. A test on the random number generator 
+(testgenerator.out), a test on the distributions the generator
+uses to transform the random number stream (testdistributions.out) and
+a test on the event scheduling algorithm (testqueues.out).
+
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+The generator tests :
+
+We developed the following tests for the generator :
+
+- the Uniformity Test
+ - dimension 1:
+  The interval (0,1) is split up in into 10 intervals. For randomness
+  we would expect the counts in each interval to be equal.
+  A chi square test is performed with each member of the expected
+  array equal to 1/10 * number of samples.
+ - dimension 2
+  The random fractions are casted to integers in the range 0,..,9. We
+  count the pairs(i,j) where each pair has an expected value of 1/100.
+ - dimension 3
+  The same idea, with each triple having an expected value of 1/1000.
+
+- the Gap Test
+  An interval between a and b is defined (b > a). Each random number
+  is replaced with 0 if outside and with 1 if inside the interval.
+  The expected value of a gap of length k is :
+
+          (b-a) * pow(1-(b-a),k) * number of fractions
+
+- the Poker Test
+  In this test we multiply the random fractions with 10 and cast them
+  to integers. Furthermore we group the sequence of integers into
+  sequences of five consecutive integers. The frequency of the
+  following categories is recorded :
+   
+  - 1 - all of the same or two different integers in a group.
+  - 2 - three different integers in the group.
+  - 3 - four different integers in the group.
+  - 4 - five different integers in the group.
+
+  A chi square test is performed with the following expected values
+  for each group :
+
+  - 1 - 0.0136 * number of random fractions.
+  - 2 - 0.1800 * number of random fractions.
+  - 3 - 0.5040 * number of random fractions.
+  - 4 - 0.3024 * number of random fractions.
+  
+- the Coupon Collector Test 
+  In this test we devide the interval (0,1) in five intervals (0,0.2),
+  ..,(0.8,1). The number of random fractions to get at least a count
+  of 1 in each interval is counted. We define 16 categories as follows :
+
+  - 1 - sequence of 5.
+  - 2 - sequence of 6.
+  ...
+  - 15 - sequence of 19.
+  - 16 - sequence of 20 or more.
+
+  A chisquare test is performed with the expected values equal to
+
+               pcc[i] * number of fractions
+
+  for i = 1,2,..,16. The array pcc is defined in tests.c.
+  
+
+If you take the 95% confidence interval as the measure for the 
+chi square probability you reject the randomness of the generator
+if the probability is less then 0.05 (not random) or more then 0.95
+(fabricated).
+
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+The distribution tests take the distribution and their parameter
+values and the parameters for the generator and the histogram objects.
+They fill the histogram with fractions from the generator transformed
+by the specified distribution. The corresponding fit (from the 
+analysis class) determines the parameters values and takes a chi
+square test with the expected values equal to the calculated 
+distribution values. You should divide the histogram in a large
+number of columns to get a reliable test.
+Again, if you take the 95% confidence interval as the measure for the 
+chi square probability you reject the distribution if the probability
+is less then 0.05 or more then 0.95.
+
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+The test on the event scheduling algorithm is a general queuing program.
+Its arrival pattern is exponential and its service pattern is either
+exponential or deterministic (a constant value). You then specify
+the arrival and service rate and the number of service points (in case
+of a M/M/c queue). The program compares the results with the theoretical
+values and rejects the hypothesis of correctness if the theoretical
+values don't lie in the confidence interval of the results.

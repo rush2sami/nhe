@@ -1,0 +1,39 @@
+#!/bin/env wish
+#
+frame .f
+scrollbar .f.scroll -command ".f.list yview"
+listbox .f.list -yscroll ".f.scroll set" -relief raised 
+pack append .f .f.scroll {right filly} .f.list {left expand fill}
+button .qquit -text quit -command { destroy . }
+pack append . .f top .qquit {top fillx}
+
+
+proc browse {dir file} {
+    global env
+    if {[string compare $dir "."] != 0} {set file $dir/$file}
+    if [file isdirectory $file] {
+        exec browse $file &
+    } else {
+        if [file isfile $file] {
+                exec $file &
+        } else {
+            puts stdout "\"$file\" isn't a directory or regular file"
+        }
+    }
+}
+
+# Fill the listbox with a list of all the files in the directory (run
+# the "ls" command to get that information).
+
+if $argc>0 {set dir [lindex $argv 0]} else {set dir "."}
+set x "[glob *.out]"
+foreach i [glob *.out] {
+    .f.list insert end $i
+}
+
+# Set up bindings for the browser.
+
+bind .f.list <Control-q> {destroy .}
+bind .f.list <Control-c> {destroy .}
+focus .f.list
+bind .f.list <Double-Button-1> {foreach i [selection get] {browse $dir $i}}

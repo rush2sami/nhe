@@ -1,0 +1,89 @@
+The problem :
+
+This example illustrates the use of priority queues in a simulation
+of a jobshop.
+A jobshop is a system where a central resource is
+shared by customers that submit complete jobs for processing and
+receive some form of output. You can think of a batch computer system
+with a single cpu. Typically the cost to the customer in using this service
+is based on the amount of time required to process the particular job.
+In our example the customers are served in priority order with highest
+priority first.
+Furthermore a job with the highest priority will preempt the job that 
+is currently served, if the current job does not have
+the highest priority. The job, that is preempted will be appended to
+the queue and will be served later for the remaining service time.
+If a customer is not served after
+some maximal period the customer is discarded.
+In our example the jobshop offers four grades of service and a
+premium will be paid for a higher grade of service because higher
+priority jobs will always go in front of lower priority jobs when
+queuing for service time. Each grade of service has an associated job
+priority. They are defined as 0,1,2 or 3 with 3 being the highest and
+0 the lowest.
+
+Based on the existing job load we are interested in the waiting times and
+the number of interrupts for customers taking the priority into account.
+Furthermore we are interested in the number of customers, that depart
+without being served.
+
+Existing measurements of the traffic load have indicated that job
+submissions basically fall into three classes of service usage which
+are independent of the grade of service. Job submissions follow a
+normal distribution with the parameters shown in the next table.
+
+Type of   |          | Standard   | Percentage
+job       | Mean     | deviation  | of total 
+-----------------------------------------------
+A         | 0.76     | 0.16       | 21      
+B         | 2.14     | 0.22       | 57    
+C         | 13.65    | 1.83       | 22     
+
+A job has a maximal waiting time of 50 time units.
+The inter-arrival time of jobs follows an exponential distribution with
+parameters shown in the next table.
+
+Grade of   |                 |       
+Service    | Distribution    | Mean 
+--------------------------------------
+0          | Exponential     | 19.8
+1          | Exponential     | 13.6  
+2          | Exponential     | 11.2 
+3          | Exponential     | 27.5 
+
+Furthermore, redundancy has been built-in for the server, because it is
+subject to stochastic failures. If the server goes down, an identical
+server is switched on and the broken server is replaced. The
+system as a whole goes down when the operating server goes down while
+the standby is not yet replaced. In this kind of problem it is
+convenient to work with the Weibull distribution.
+A random observation of the lifetime of a server with parameters 
+a and b is 1/b * -ln(1-u)^(1/a) where u is a random number 
+between 0 and 1.
+Closer examination has revealed as parameters for the lifetime of
+the server a = 1 and b = 1.4.
+Finally the replacement time is uniformly distributed between 0.1 and
+0.12. We are interested in statistics of the lifetime of the system as
+a whole.
+
+The program :
+
+The program consists of the processes job, server and breakdown.
+A job arrives or departs, furthermore it provides means for
+calculating the service time, (this function returns the time
+left if the job has been interrupted).
+The server provides members for serving, preempting and
+discarding a job. The state of the server can be set with the
+methods breakdown and fixed. The member current holds the job
+currently served. It is equal to NULL, if no job is served.
+The breakdown entity models the breakdown of the server.
+The servers are both ok, both down or only one server is ok.
+In the main function the simulation is set up. Notice that
+the simulation stops after RUNS runs with the quit member of the
+class simulation.
+Furthermore jobs receive a queuing priority when created, so
+the queue is actually a priority queue. Finally the chisquare
+probability of the exponential fit is high, so we have a reasonable 
+fit. If we want to be sure that this kind of problem
+results in an exponential distributed variable, we have to
+perform this test more then once.
