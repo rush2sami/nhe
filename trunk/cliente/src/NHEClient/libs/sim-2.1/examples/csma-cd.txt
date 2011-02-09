@@ -1,0 +1,205 @@
+1) The CSMA-CD protocol
+
+In short, CSMA-CD (Carrier Sense Multiple Access with Collision Detection),
+behaves like this. When a station wants to transmit, it listens to the channel.
+If the channel is busy, because some other station is transmitting, the
+station waits until the channel goes idle. When the channel is
+sensed idle the station attempts a transmission, with probability 1,
+i.e. always. If two or more stations happen to transmit simultaneously
+their transmissions will collide, resulting in unintelligible frames,
+and so they will have to be retransmitted. Retransmissions are
+scheduled to occur a random time after the collision took place.
+This cycle is repeated until either the station gives up because it
+has exceeded the maximum number of possible attempts or the transmission
+has been successful. Collision detection increases the efficiency of
+the protocol by eliminating the amount of time wasted transmitting a
+garbled frame. If a collision is detected, the instead of continuing
+the transmission and sending out useless information, the frame is sent
+in a normal way, a random time later.
+For a complete account of the CSMA-CD protocol, refer to 
+Tanenbaum(1988).
+The program is based on a case study, described in Watkins(1993).
+
+2) Goals
+
+Our first task is to determine, what the simulation should do. Assume,
+we're interested in the performance of the protocol in the steady
+state. The output should give us insight in the following topics :
+
+ - Number of stations waiting to transmit. This is the average
+   number of stations, waiting for a lull in the network traffic, so
+   an attempt to transmit a frame can be made.
+ - Transmit delay. This is the time between the initial attempt
+   to transmit a frame and the time when a successful transmission 
+   starts.
+ - Protocol efficiency. This is the ratio of the number of
+   successful frames to the maximum number possible, when the LAN is
+   being operated at it's maximum rate.
+
+Furthermore the model should be able to handle the following input variables :
+
+ - Frame size. This is the size of a frame in bytes.
+ - Number of users. This is the number of users on the LAN.
+ - Idle time. The mean idle time after a frame has been
+   either transmitted or discarded (because the maximum number of 
+   attempts has been made).
+ - Transient duration. The duration of the initial transient phase
+   which is to be ignored as far as results are concerned. Furthermore
+   a possibility to investigate this transient phase should be provided.
+ - Simulation duration. The duration of the simulation.
+ - Random number seed. This is the seed for random number
+   streams so that separate runs can be made independent.
+
+We will also make the following assumptions :
+
+ - The channel is noiseless and the stations are perfectly reliable.
+   Frames travel along the cable from the transmitting station in
+   both directions.
+ - The time between the end of one transmission attempt and the
+   beginning of the next is exponentially distributed.
+ - Protocol efficiency is required with all stations working 
+   continuously, i.e no idle periods.
+
+3) The class ethernet.
+
+The model of the ethernet is based IEEE standard 803, that covers
+CSMA-CD protocols from 1 to 10 Mbps. The ethernet corresponds to
+the 10 Mbps variety.
+The first parameter of the ethernet object is the signal propagation speed,
+that is equal to 0.67 times the speed of light, or +/- 0.2km/10^-6s.
+The slot size is the time it takes a signal to travel from one end of
+the maximum length of the cable to the other. This parameter is important,
+because if a station wants to be sure, that it's frame has been correctly sent,
+the station may not receive a frame for two slot periods. If a station
+sends a frame and the receiving station start to transmit, just before
+receiving the frame, it will take two slot periods for detecting the
+garbled frame and realizing the own transmission has failed.
+The slot size is set to 51.2 10^-6s. Ethernet corresponds to the 10 Mbps
+variety of CSMA-CD protocols, so it's speed is set accordingly.
+The maximum number of retransmissions is assumed to be 16, where as
+the maximum, used in calculating the retransmission time, is assumed to
+be 10. The cablelength is the slot size times the signal propagation
+speed, or +\- 10 km. Furthermore the ethernet class receives
+counters for the number of successes, backoffs, stations and for the
+total delay and idle time.  Each station is recorded, as well as the two generators
+and the histogram, used to gather samples of the number of stations
+waiting. Furthermore the simulation object is recorded in the ethernet
+object. At last the neighbor delay and time to transmit a frame are
+calculated, according to the IEEE standard.
+The constructor initializes the ethernet. The method init saves
+the ethernet pointer, so it can be used with the method theethernet,
+if the pointer is outside the scope, it is created in. The diverse
+inline members are used for manipulating the ethernet private data.
+
+4) The class station.
+
+Class station models a station on the LAN, it can be in the following
+five states :
+
+ - Idle. The station is doing nothing. When a frame transmission
+   request is received, the station goes to the WAIT state.
+ - Wait. In this state a frame is available to be transmitted
+   and the station is waiting for a quiet channel to do so. When a 
+   quiet channel is detected the station can start to transmit the 
+   frame and proceed to the LISTEN state.
+ - Listen. The stations monitors the channel to see if any other
+   transmissions take place, which corrupt the frame, being transmitted.
+   If no other frames are detected within two slot periods, then the 
+   transmission will be successful and the station can adopt the 
+   FINISH state. If a colliding frame is detected, within this interval,
+   the state must revert to CONTENTION.
+ - Contention. This state is entered if, during the initial two slot 
+   delay, a corrupting frame is detected. In this state a
+   random delay is calculated, after which the station assumes the the
+   WAIT state again in order to obtain a free channel for 
+   retransmission.  However, if the maximum number of retransmissions
+   have been attempted already, then the transmission has failed, 
+   the frame is discarded, and the station reverts to IDLE state.
+ - Finish. This state is entered after a successful two-slot delay
+   in which no corrupting frames were detected. The station can adapt
+   the IDLE state once again.
+
+A station keeps counters of the number of successful transmissions,
+number of retransmissions, total of frames offered and of the number
+failed. It keeps the identity and flags of passing frames and if the
+last attempt to transmit was successful.
+It is derived from entity and adds the phase off the station.
+The inline members are for manipulating the private data.
+The others define the behavior of the station.  The function
+operator implements the behavior of the station. On a switch on phase 
+the appropriate actions are taken.
+Wait adjusts the counters of the number waiting and number
+of transmissions for the belonging station in the
+ethernet and makes a sample of the number of stations, waiting to transmit.
+It goes to phase WAIT and is made conditional.
+Trytransmit makes a sample of number waiting and adjusts counters,
+if the channel is clear.
+The phase is set to LISTEN and the station is scheduled after two
+slot sizes. Receive determines, if the last transmission was
+successful. If so, it adds the number of successes and the delay to
+the counters in the ethernet and the phase is set to FINISH.
+Otherwise the station makes an attempt to retransmit the frame.
+Tryagain makes an attempt to retransmit a frame after a
+collision took place. Finish resets the station and tries to
+transmit again. Reset and zero reset counters of a station.
+Transmit takes the direction of the frame and the transmitting
+and receiving station. It records the passing frame and schedules
+the propagating frame. Retransmit gets the transmitting station
+and records failure and schedules finish, if the maximum of retransmission
+attempts have been made. Otherwise, the phase of the station is set to
+CONTENTION and a next attempt is scheduled after the retransmission
+time. Finished returns OK, if both ends are equal to NULL, 
+otherwise FALSE is returned. Channelclear returns OK, if no
+frames are propagating this station, otherwise FALSE is returned.
+Retranstime returns the retransmission time, according to the
+binary exponential backoff, see Watkins(1993).
+
+5) The class frame
+
+There are three states for frames at any given station :
+
+ - Arrival. In this state the start of a frame has arrived
+   at a station. The frame will propagate to the neighbor unless it
+   is at the end of the cable in which case there is no neighbor to
+   go to. If the station is in the LISTEN state at the time a frame
+   is received, then a collision occurs and the station moves to the
+   CONTENTION state.
+
+ - Departure. In this state the end of a frame is leaving a
+   station and propagating towards a neighbor.
+ - Transit. In this state a frame is traveling past a
+   station. Note that this state can be modeled only implicitly because
+   it will occur when the departure of a frame entity from a station is
+   pending. As soon as the frame is activated it assumes the DEPARTURE
+   state. We obtained the following design for the frame class.
+
+A frame has to keep record of it's sender, it's direction, a flag on
+corruption and the stations, it is passing by.
+The constructor receives the direction, the phase and the
+stations, arriving at or departing from.
+The operator() function implements the behavior of the frame.
+If a frame is arriving and the station, arriving at is currently
+listening, we have a collision and the frame has to be
+invalidated. Otherwise arriveleft or arriveright are
+invoked, depending on the direction of the frame.
+If a frame is departing and the source , first we have to dereference 
+the 'end' pointer from the station departing from. If the station has
+finished transmitting and the frame was not corrupted, the station
+is activated and it's phase is set to FINISH.
+
+6) The main function
+
+The simulation first runs for an initial user-defined transient period.
+After this period the statistics are reset, so the results will be
+over the steady period.
+Then it runs for n (user-defined) batches, because the run will
+show regenerative behavior. After each batch the
+number of successes is reset to 0. The final results are the means
+of the batch means. This method (the batch-regenerative method)
+gives more accurate results. Take as transient period about 500
+msecs and as block period about the same time. 
+
+7) References
+
+Tanenbaum (1988) A.S. Tanenbaum - Computer Networks 
+Watkins (1993) K. Watkins - Discrete Event Simulation in C 

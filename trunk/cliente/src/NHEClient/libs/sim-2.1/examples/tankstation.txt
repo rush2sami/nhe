@@ -1,0 +1,35 @@
+The problem :
+
+Cars arriving at the tankstation can choose between lpg and gasoline.
+The station has three pomps for gasoline and one for lpg. Two
+servants connect, fill and disconnect the car, when it is served.
+If the car is filled with lpg or gasoline the servant is free to
+serve other cars. It is known that 70% from the cars wants gasoline.
+Furthermore the connecting, the filling, the disconnecting and the
+inter-arrival time of a car are uniformly distributed with parameters
+respectively 2 and 4, 5 and 9, 3 and 5 and 2 and 8 minutes.
+
+We are interested in the occupation of the pomps and of the 
+servants, in sizes of the queues for the pomps and for the servants
+and in the covariance and correlation of these sizes.
+The results should be given for the first 10000 cars, that
+arrive at the station.
+
+The program :
+
+The program consists of three resources for the pomps and servants.
+They all have a queue in front of them and receive a report on the
+occupation and the size of the queue. The processes are modeled by
+the entities car, servant and station. If a car arrives it is
+appended to the lpg or gasoline queue and when removed it is again
+appended to the service queue. After being removed from this queue
+the car is filled and once again appended to the service queue for
+the disconnecting of the car. If disconnected the car can depart from
+the station. Notice that the phase of the car chances during this 
+process from ARRIVAL to CONNECT to FILL to DISCONNECT to DEPARTURE.
+The run method receives the integer 10000 as parameter and the cars
+receive a kill flag when created, so if 10000 cars have been
+terminated, the simulation stops. After the running of the simulation
+the covariance and correlationcoefficient of the size of the service
+queue and the sizes of the lpq and gasoline queue are determined.
+They appear to be uncorrelated.

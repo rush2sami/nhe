@@ -1,0 +1,23 @@
+The problem :
+
+With the alternating bit protocol when a frame is transmitted a time
+out is set, that expires if no acknowledgement for the transmitted
+frame has been received in the permitted time. We transmit 
+packets from 1024 bytes with a line speed of 4096 bytes a second.
+So a transmission of a packet should last 0.25 seconds and the
+time out expires in 0.52 seconds. We are interested in the 
+amount of data that is successfully transmitted, given the bit
+error rate.
+
+The program :
+The events in this problem are the transmit, the receive, the 
+acknowledge and the time out event. We can combine the first three
+events in a process frame. The transmit event schedules a receive
+event with a probability p and a time out event. The receive event 
+schedules an acknowledgement if the sequence numbers of the packets
+do agree (and no frame has been lost). The acknowledge event
+passivates the time out and schedules a new transmission. The
+probability p is calculated as the inverse of the bit error rate times 
+the size of the frame (i.e. 1024 bytes). So if we have a bit error
+rate of 1/10000, the probability of a successful transmission is equal
+to 0.89.

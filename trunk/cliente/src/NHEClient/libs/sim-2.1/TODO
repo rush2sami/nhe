@@ -1,0 +1,55 @@
+
+Delivery-Date: Tue, 27 Feb 1996 18:06:05 +0100
+Return-Path: <eriks@cs.vu.nl>
+Received: from flits.cs.vu.nl by top.cs.vu.nl with esmtp
+	(Smail3.1.28.1 #23) id m0trSqi-0000o0C; Tue, 27 Feb 96 18:06 +0100
+Received: by flits.cs.vu.nl (Smail3.1.28.1 #23)
+	id m0trSqg-0005rTC; Tue, 27 Feb 96 18:06 +0100
+Message-Id: <m0trSqg-0005rTC@flits.cs.vu.nl>
+Date:     Tue, 27 Feb 96 18:06:02 MET
+From:     Erik van der Sluis <eriks@cs.vu.nl>
+To:       jrvosse@cs.vu.nl
+cc:       eliens@cs.vu.nl
+Subject:  Hamburgers
+
+Jacco,,
+
+Een versie van het spel dat werkt staat in de directory
+	/home/eriks/Sim/Hamburger
+Compileren gaat niet meer bij mij omdat er iets verandert 
+is. De .c en .out files heb ik (geloof ik) op 14/2 uit de directory
+	/home/hush/src/packages/sim-2.0/hamburgershop
+gehaald. Maar daar staan gee .out files meer. Dus ik weet niet
+welke versie nu op de Orientatiedag is gebruikt.
+
+
+Wat mij opvalt is dat in diverse files staat
+	/home/eliens/dv/hush/version/sim-1.8
+Werkt dit nog? Ook de versies in de simc++ directories??
+
+
+Wat aan het spel kan worden verbeterd is:
+  -  Langer wachten tot time-out bij invoeren instellingen van de 
+     spelers. (2 keer zo lang als huidige waarde)
+  -  De 1e dag spelen met de instellingen van de server als deze
+     aanwezig is.
+  -  De bug wordt misschien veroorzaakt bij het bepalen van het
+     aantal aankomsten bij een client. Bij het spelen ging het 
+     fout bij de 2de dag met instelling: 60 aankomsten / uur.
+     Een speler krijgt echter meer of minder aankomsten afhankelijk
+     van zijn prestaties op de vorige dag waardoor het niet bij
+     elke speler fout gaat. De bug manifesteert zich door op 
+     tijdstip 9.00 alleen maar aankomsten te genereren (met 
+     tussentijd nul) en gaat dus niet verder.
+  -  De server genereerde een rare results file op de orientatiedag:
+     de eerste 50 dagen bevatte telkens maar 1 speler. Daarna
+     wel een overzicht van +- 20 spelers per dag. Ook het overzicht
+     bij de client is te klein voor dit grote aantal deelnemers.
+
+
+Met de huidige versie kan ik in maart (23 en 28) wel spelen door
+het vermijden van 60 als instelling. Belangrijk is dat ik steeds een
+werkende versie tot mijn beschikking heb.
+
+Mvg, Erik van der Sluis
+

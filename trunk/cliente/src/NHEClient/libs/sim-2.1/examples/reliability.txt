@@ -1,0 +1,20 @@
+The problem :
+
+A component of a system is subject to stochastic failures. If the 
+component fails an identical component is switched on and the broken
+component is replaced. The system as a whole goes down when the
+standby fails before the broken one is replaced. We are interested
+in the life time of the system and the chances that this life time is
+greater then 5,10,15... We know that the life time of one component
+follows a weibull distribution with parameters 0.9080 and 1.4355 and
+that the replacement time is equal to one time unit.
+
+The program :
+
+The program consists of a failure event, that quits the simulation
+if both parts are down or waits if the component is replaced in time.
+Notice that there is always one part down when the failure event is
+activated. The exponential distribution is fitted on the resulting
+probability histogram. The resulting chi square statistic suggests a
+reasonable fit. More tests should be performed before one can say
+that the probability histogram follows the exponential distribution.

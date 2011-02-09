@@ -1,0 +1,18 @@
+The problem :
+
+Ships arrive at a harbour following an exponential
+distribution with 4/3 (days) as mean. The harbour can
+handle two ships. The processing time is uniformly
+distributed between 0.25 and 0.75, if the ship is the
+only ship in the harbour. Otherwise the processing time is 
+uniformly distributed between 0.5 and 1.5.
+We are interested in statistics of the waiting times and number of
+waiting ships.
+
+The program :
+The program consists of the events arrival, departure and service, 
+that can be combined in the processes ship and server, a resource 
+harbour with an initial amount 2 and the queue, that gets reports on 
+the size and waiting times. The program makes a long run and splits
+this run in several subruns, thus decreasing the variance of the 
+results, (method of batch means).

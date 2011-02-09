@@ -1,0 +1,20 @@
+The problem :
+
+Customers arrive at a service point with an initial amount of 1, where 
+the interarrival of customers and the service are exponentially
+distributed with respectively 1/5 minute and 1/6 minute as mean.
+We are interested in the size of the queue and the waiting times of
+customers over the entire day and over the period when the behavior
+is steady. 
+
+The program :
+
+The program consists of the events arrival, departure and service. The
+implementation of these events as well as the implementation as an 
+entity is straightforward. In the main function we run the simulation
+for a day with both the histogram of the waiting times and the histogram
+of the queue size analyzed on steady state behavior. From inspecting 
+these histograms we obtained an initial transient period of 50 minutes.
+We first reset the simulation and it's belongings and run the simulation
+for 50 minutes and then for the remaining day. During the second run
+the samples are taken after the initial transient period.

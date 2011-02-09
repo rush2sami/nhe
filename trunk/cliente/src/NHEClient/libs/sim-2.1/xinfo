@@ -1,0 +1,10 @@
+#!/bin/sh
+ROOT=`pwd`
+
+X="$ROOT/man"
+if [ $# -ge 1 ]; then
+if [ $1 = "+" ]; then shift; M=$X:$MANPATH; else M=$X; fi;
+else M=$X;
+fi
+export MANPATH; MANPATH=$M
+xman -xrm "xman*directoryHeight:50" -bg white -fg blue -bothshown -notopbox -helpfile $X/tk.help

@@ -1,0 +1,108 @@
+.TH QUEUE 2
+.SH NAME
+   queue
+.SH SYNOPSIS
+.nf
+interface queue 
+{
+  queue();                     // constructor.
+  virtual ~queue();            // destructor.
+
+  void reset();                // reset queue.
+
+  int reportsize(histogram* h,double interval = 0);
+  int reportwaiting(histogram* h,double interval = 0,int qp=0); 
+  int reportwaitingall(histogram* h,double interval = 0); 
+
+  int prepend(event* e);      // add to front.
+  int append(event* e);       // add to back.
+
+  event* removefront();       // remove front.
+  event* front();             // return front.
+  event* removeback();        // remove back.
+  event* back();              // return back.
+
+  int extract(event* e);      // extract e.
+
+  int terminatefront();       // terminate front
+  int terminateback();        // terminate back
+
+  int cancel();               // cancel specified events
+
+  int size();                 // return size.
+  int empty();                // is empty ?
+
+  friend ostream& operator<<(ostream& os,queue& q);
+};
+.fi
+.SH DESCRIPTION
+A queue is typically used to queue events, willing to use an 
+already busy resource. Queue creates a queue and
+maintains the size of the queue. Reset disposes the queue and
+sets the size to 0. Reportsize fills the given histogram
+with samples of the size of the queue. The samples are taken,
+each time an event or entity is appended to, prepended to,
+removed from or extracted from the queue. The histogram is
+printed, each 'interval' time units. If 'interval' is equal to 0 
+(default), the histogram is printed at the end of the simulation. The
+histogram should be of type WEIGHTED. Reportwaiting generates
+a report of the waiting times for events with the given priority. 
+The samples are taken each time
+an event is removed from the queue, these events all received
+a waiting time stamp, when added to the queue. The histogram should
+be of type FREQUENCY. Reportwaitingall generates a report on the
+waiting times of the events regardless of their queuing priority. 
+Prepend adds an event e 
+to the front of the queue, append adds it to the back of the queue. 
+If the events or entitys receive a queuing priority, they will be added in
+priority order, with higher priority first.  Removefront removes 
+the front of the queue and returns this event, removeback removes 
+the back and returns this event. Back and front only 
+return the back and the front of the queue. Extract extracts event e 
+of the queue, if possible.  Terminatefront deletes the front of
+the queue, terminateback the back of the queue. 
+The cancel method removes and terminates all events from the queue
+that return FALSE from their event::verify method.
+The method returns the number of terminated events.
+These functions don't make a sample of the waiting time or size. 
+Size returns the size of the queue 
+and empty returns TRUE, if the queue is empty, FALSE otherwise.
+The operator<< function is overloaded for queue, so when used
+the tree-structure and size of the queue are written to standard output.
+.SH EXAMPLE
+.nf
+enum {ARRIVAL,DEPARTURE};
+
+int application::main(kit* tk,int argc,char* argv[])
+{
+  simulation* sim = new simulation();
+  queue* q = new queue();
+  generator* g = new generator(3,2,4);
+  int i=0;
+  while (i < 10)
+  {
+    int priority = (int)g -> uniform(0,10);
+    if (priority < 5)
+      entity* e = new entity(ARRIVAL,priority);
+    else
+      entity* e = new entity(DEPARTURE,priority);
+    q -> append(e);
+    cout << (*q);
+    i++;
+  }
+  while (!q -> empty())
+  {
+    delete (q -> removefront());
+    cout << (*q);
+  }
+  delete sim;
+  delete q;
+  return 0;
+}
+.fi
+.SH REMARKS
+In this example a queue is filled with arriving and departing 
+entitys. The departing entitys receive a higher priority, so they 
+will be removed first.
+.SH SEE ALSO
+   entity(6), generator(6).

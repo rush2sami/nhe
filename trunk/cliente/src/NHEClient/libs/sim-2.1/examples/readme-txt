@@ -1,0 +1,4 @@
+for i do
+mv $i.readme $i.txt
+done
+

@@ -1,0 +1,16 @@
+The problem :
+
+In a bank customers arrive and are served according to the exponential 
+distribution. A customer that arrives takes the first service point with the
+queue of minimal size in front of it. We are interested in the
+queue sizes and occupation of each service point. Furthermore we
+are interested in the actual time that the customer is in the
+post office. The parameters of the model are : the number of service point,
+the means of the inter-arrival time and service time and the day
+length in hours.
+
+The program :
+
+The implementation is straightforward. The program consists of
+an arrival, departure and service event.  The statistics are gathered 
+with the report members.

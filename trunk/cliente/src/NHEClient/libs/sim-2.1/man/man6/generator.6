@@ -1,0 +1,92 @@
+.TH GENERATOR 2
+.SH NAME
+   generator.
+.SH SYNOPSIS
+.nf
+interface generator 
+{
+ public :
+  generator(unsigned int s1,unsigned int s2 = 0,unsigned int s3 = 0);
+   
+  void antithetic(); // use reverse.
+
+  void reset();      // reset random number steam.
+
+  int probability(double p = 0.5); // TRUE with prob. p.     
+
+  double uniform(double a,double b);
+  double exponential(double a);
+  double hyperexponential(double p,double a,double b);
+  double laplace(double a);
+  double normal(double a,double b);
+  double chisquare(unsigned int n);
+  double student(unsigned int n);
+  double lognormal(double a,double b);
+  double erlang(unsigned int n,double a);
+  double gamma(double a,double b);
+  double beta(double a,double b);
+  double fdistribution(unsigned int n,unsigned int m);
+  double poisson(double a);
+  double geometric(double p);
+  double hypergeometric(unsigned int m,unsigned int n,double p);
+  double weibull(double a,double b);
+  double binomial(double p,unsigned int n);
+  double negativebinomial(double p,unsigned int n);
+  double triangular(double a);
+
+ protected :
+  double random();    // produces a random number between 0 and 1.
+};
+.fi
+.SH DESCRIPTION
+The constructor generates a random stream numbers with
+given seeds. If antithetic is set, the reverse of the current
+stream is used. Reset resets the random number stream as if no
+random number was generated from it. Probability returns TRUE 
+with probability p (default 0.5) and FALSE with probability 1-p.
+The distribution functions all generate the following number
+from the random number stream and transform this number following the 
+specified distribution. The method random generates a new number from
+the random number stream. It is made protected, so a new generator can
+be derived from this generator and add new distibutions to the
+existing ones.
+.SH EXAMPLE
+.nf
+int application::main(kit* tk,int argc,char* argv[])
+{
+  simlation* sim = new simulation();
+  generator* g1 = new generator(1,1,1);
+  generator* g2 = new generator(1);
+  generator* g3 = new generator(2,34,1029);
+  generator* g4 = new generator(2,34,1029);
+  g4 -> antithetic();
+  histogram* h = new histogram("-start -5 -title normal");
+  for (int i=0;i<100;i++)
+    h -> sample(g1 -> normal(0,1));
+  cout << (*h);
+  h -> reset();
+  for (i=0;i<100;i++)
+    h -> sample(g2 -> normal(0,1));
+  cout << (*h);
+  h -> reset();
+  for (i=0;i<100;i++)
+    h -> sample(g3 -> normal(0,1));
+  cout << (*h);
+    h -> reset();
+  for (i=0;i<100;i++)
+    h -> sample(g4 -> normal(0,1));
+  cout << (*h);
+  delete h;
+  delete sim;
+  return 0;
+}
+.fi
+.SH REMARKS
+Four generators are created. G1 and g2 are the same,
+but g3 is different, because of the difference in seed.
+G4 creates a reverse of the stream, created by g3.
+The generators all return values, according to the 
+standard normal distribution. Generator can be used
+without a simulation object.
+.SH SEE ALSO
+simulation(6), histogram(6).

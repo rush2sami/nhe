@@ -1,0 +1,24 @@
+#link to the HUSH version
+include resource.mk
+
+#link to the ASCII version
+#include ascii.mk
+
+OBJECTS=
+
+SRC : sh = ls *.c
+
+TEST = philo-sc.out job-sc.out
+
+OUT = ${SRC:.c=.out}
+
+all: $(OUT)
+
+test: $(OUT)
+demo: $(TEST)
+	job-sc.out -f browse
+	
+
+clean:
+	rm -f *.o *.out
+	rm -f -r Templates.DB

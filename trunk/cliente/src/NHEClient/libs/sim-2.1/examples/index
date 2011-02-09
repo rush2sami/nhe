@@ -1,0 +1,5 @@
+<h2>Examples -- sim</h2>
+
+<control>
+<include cmd="ls *.c | list-html" file=idx.html>
+</control>

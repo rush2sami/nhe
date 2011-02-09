@@ -1,0 +1,112 @@
+.TH HISTOGRAM 2
+.SH NAME
+   histogram
+.SH SYNOPSIS
+.nf
+interface histogram : public screen 
+{
+  histogram(char* p,char* options = "");
+  histogram(widget* w,char* p,char* options = "");
+  virtual ~histogram();   
+
+  void sample(double x,double y = 1);     // adds a sample.
+
+  ofstream* file(char* fn);     // write samples made to file fn
+  void closefile();             // close file fn
+ 
+  void reset();                 // resets internals.
+
+  double mean();                // return mean.
+  double variance();            // return variance.
+  double standarddeviation();   // return standard deviation.
+  double sumfrequencies();      // return sum of frequencies
+  double minimum();             // return minimum value
+  double maximum();             // return maximum value
+          
+  void postscript(char* fn);    // generate postscript.
+
+  friend ostream& operator<<(ostream& os,histogram& h);
+};
+.fi
+.SH DESCRIPTION
+A histogram can be used when gathering and printing
+the results of the simulation.
+The histogram can be printed as a frequency graph, as a cumulative
+frequency graph and as a table. You can also print the statistics.
+The printing can be specified in the options parameter by adding the
+form option (default graph). The constructor takes the path of
+the widget. The options take the start value (default 0), the width 
+of a column (default 1), the number of columns (default 10), type of 
+histogram (default frequency), output form (default graph), the 
+title (default histogram), the foreground color (default black), the
+background color (default grey), the width and height (default 
+dependent on the form ((cumulative) frequency graph, table or 
+statistics).
+Sample takes two double and adjusts the internal data accordingly. 
+X resembles the sample, y the frequency (default 1).  If the
+histogram is of type  FREQUENCY the y value is added to the column
+that x falls in. The y value becomes y times the time since the last
+entry if the histogram is of type WEIGHTED. In a time series 
+the x value represents time so it is ignored and the y value is 
+added to all columns between the column representing the last
+entry and the column representing the current time. 
+The method file creates a file fn and writes every sample made in the
+histogram to this file (the x value on the first new line and the y
+value on the second new line). It returns the file pointer
+of the created file. Reset resets 
+the histogram (and its window), as if no samples were recorded.
+The method postscript writes the window of the histogram object
+(if created) in postscript format to the specified file.
+The histogram can be printed to standard 
+output or on a window (if the library runs in HUSH mode)
+with the cout operator.
+.SH OPTIONS
+.nf
+  -start <double = 0>
+  -columnwidth <double = 1>
+  -columns <int = 10>
+  -type <frequency,weighted,series>   // default frequency
+  -form <graph,cumulative,table,statistics>   // default graph
+  -title <string = histogram>
+  -foreground <color = black>
+  -background <color = grey>
+  -width <coord = 100+40*(columns+2), 600, 400> 
+  -height <coord = 360, (columns+7)*20, 100> 
+         // pre : width/default == height/default
+.fi
+.SH EXAMPLE
+.nf
+int application::main(kit* tk,int argc,char* argv[])
+{
+  simulation* sim = new simulation();
+  histogram* h1 = new histogram(".h1","-columnwidth 10 -form graph -title graph");
+  histogram* h2 = new histogram(".h2","-columnwidth 10 -form cumulative -title cumulative");
+  histogram* h3 = new histogram(".h3","-columnwidth 10 -form table -title table");
+  histogram* h4 = new histogram(".h4","-columnwidth 10 -form statistics -title statistics");
+  generator* g = new generator(2,1,9000);
+  for (int i=0;i<1000;i++)
+  {
+    double smp = g -> exponential(10);
+    h1 -> sample(smp);
+    h2 -> sample(smp);
+    h3 -> sample(smp);
+    h4 -> sample(smp);
+  }
+  cout << (*h1);
+  cout << (*h2);
+  cout << (*h3);
+  cout << (*h4);
+  delete sim;
+  delete h1;
+  delete h2;
+  delete h3;
+  delete h4;
+  return 0;
+}
+.fi
+.SH REMARKS
+Four frequency graphs are created and filled with 1000 samples 
+from the exponential distribution.  The couts results in a frequency
+graph, a cumulative frequency graph, a table and a summary.
+.SH SEE ALSO
+simulation(6), generator(6).

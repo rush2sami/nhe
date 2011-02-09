@@ -1,0 +1,163 @@
+.TH SCREEN 2
+.SH NAME
+   screen.
+.SH SYNOPSIS
+.nf
+interface screen : public canvas
+{
+  screen(char* p,char* options = "");
+  screen(widget* w,char* p,char* options = "");
+  virtual ~screen();
+   
+  int line(int x1,int y1,int x2,int y2,char* options = "");
+  int line(char* linespec,char* options = "");
+  int oval(int x1,int y1,int x2,int y2,char* options = "");
+  int circle(int x,int y,int r,char* options = "");
+  int polygon(char* linespec,char* options = "");
+  int rectangle(int x1,int y1,int x2,int y2,char* options = "");
+  int square(int x,int y,int r,char* options = "");
+  int bitmap(int x,int y,char* bitmap,char* options = "");
+  int text(int x,int y,char* txt,char* options = "");
+
+  void move(int id,int x,int y);      // move item
+  void move(char* fig,int x,int y);   // move figure
+
+  void del(int id);                   // destroy item
+  void del(char* fig);                // destroy figure
+
+  void tag(int id,char* tg);          // add a tag
+  char* tags(int id);                 // which tag ?
+   
+  int overlapping(int x,int y);       // which item on (x,y)
+  char* items(int x,int y);
+
+  void postscript(char* fn);          // generate postscript
+};
+.fi
+.SH DESCRIPTION
+The screen functionality is derived from the hush canvas class. The
+difference is that a screen also exists in the ASCII version and that
+it is based on world coordinates. The items you can add to the screen
+take world coordinates so if you have an application and you wish
+to have your screens smaller the only thing you have to do is to
+adjust the width and height of the widget. (The other classes all use
+this screen for graphics).
+.SH OPTIONS
+.nf
+  -foreground <color = black>
+  -background <color = grey>
+  -width <coord = 800>    // width/worldx == height/worldy
+  -height <coord = 600>
+  -worldx <coord = 800>
+  -worldy <coord = 600>
+.fi
+.SH EXAMPLE
+.nf
+#include <sim/sim.h>
+
+generator* g;
+simulation* sim;
+screen* s;
+int xcoord = 0;
+kit* kt;
+
+
+class move : public event
+{
+public :
+  move() : event()
+    {}
+  virtual int operator()()
+  {
+    // new line
+    s -> tag(s -> line(xcoord,250,xcoord+20,250,"-fill red -width 4"),"line");
+    kt -> update();
+    xcoord += 20;
+    
+    // clear screen if the end of the screen is reached
+    if (xcoord >= 800)
+    {
+      s -> del("line");
+      kt -> update();
+      xcoord = 0;
+    }
+
+    // schedule a new move event
+    sim -> wait(1);
+    return OK;
+  }
+};
+
+
+class bounce : public event
+{
+public :
+  bounce() : event()
+    {
+    }
+  virtual int operator()()
+  {
+    // the bounce
+    s -> tag(s -> line(xcoord,250,xcoord+10,100,"-fill red -width 4"),"line");
+    s -> tag(s -> line(xcoord+10,100,xcoord+30,400,"-fill red -width 4"),"line");
+    s -> tag(s -> line(xcoord+30,400,xcoord+40,250,"-fill red -width 4"),"line");
+    kt -> update();
+    xcoord += 40;
+  
+    // clear screen if the end of the screen is reached
+    if (xcoord >= 800)
+    {
+      s -> del("line");
+      kt -> update();
+      xcoord = 0;
+    }
+
+    // schedule a new move event
+    sim -> wait(g -> exponential(40));
+    return OK;
+  }
+};
+
+
+class application : public session
+{
+public :
+  application(int argc,char** argv) : session(argc,argv,"moving item")
+    {}
+
+  int main(kit* tk,int argc,char** argv)
+  {
+    sim = new simulation();
+    kt = tk;
+
+    // create the screen and query the duration
+    s = new screen(".screen");
+    tk -> pack(s);
+    tk -> update();
+    g = new generator(89,100,2);
+    move* m = new move();
+
+    // set up and run
+    sim -> schedule(m,0);
+    bounce* b = new bounce();
+    sim -> schedule(b,g -> exponential(40));
+    sim -> run(1000.0);
+
+    delete sim;
+    return 0;
+  }
+};
+
+
+main(int argc,char** argv)
+{
+  session* s = new application(argc,argv);
+  s -> run();
+  exit(0);
+}
+.fi
+.SH REMARKS
+A simple program that draws a line with a constant speed. At certain
+points in time (exponentialy distributed) the line makes a bounce. 
+.SH SEE ALSO
+   event(6), simulation(6), generator(6).

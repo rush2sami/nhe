@@ -1,0 +1,147 @@
+.TH ENTITY 2
+.SH NAME
+   entity.
+.SH SYNOPSIS
+.nf
+interface entity : public event 
+{
+protected :
+  entity(int ph=0,int qp=0,int sp=0,int kf = FALSE);   // constructor.
+
+public :
+  int phase();                 // return phase.
+  void phase(int p);           // adjust phase.
+};
+.fi
+.SH DESCRIPTION
+Entity represents a process in the simulation. It adds a phase 
+to event, so different events can be combined into one process.
+The constructor takes the phase, the queuing priority, the
+scheduling priority and the kill flag. If the kill flag is set
+to OK the termination count that was set in the simulation::run
+method decreases and the simulation possibly stops, if this
+event is terminated.
+.SH EXAMPLE
+.nf
+#include <sim/sim.h>
+
+enum {ARRIVAL,DEPARTURE};       // phases customer
+
+simulation* sim;
+histogram* h;
+resource* loket;
+queue* q;
+
+class customer : public entity
+{
+public :
+  customer(int ph);
+  virtual int operator()();
+private :
+  generator* g;
+};
+
+class server : public entity
+{
+public :
+  server();
+  virtual int operator()();
+private :
+  generator* g;
+};
+
+customer::customer(int ph) : entity(ph)
+{
+  g = new generator(2,3,4);
+}
+
+int customer::operator()()
+{
+  switch (phase())
+  {
+    case ARRIVAL :              // if arriving :
+      customer* c = new customer(ARRIVAL);  // new arrival
+      sim -> schedule(c,(g -> exponential(1)));
+      report(h);                // generate a report
+      q -> append(this);
+      return OK;
+    case DEPARTURE :            // if departing :
+      loket -> release();       // release loket
+      sim -> terminate(this);   // terminate this
+      return OK;
+  }
+  return FALSE;
+}
+
+server::server() : entity()
+{
+  g = new generator(22,32,42);
+}
+
+int server::operator()()
+{
+  while ( (!(q -> empty())) && (loket -> available()) )
+  {
+    customer* c = (customer *)q -> removefront();  // get first
+    loket -> acquire();         // acquire loket
+    c -> phase(DEPARTURE);      // adjust phase
+    sim -> schedule(c,g -> exponential(0.8));
+  }
+  return OK;
+}
+    
+class application : public session
+{
+public :
+  application(int argc,char** argv);
+  virtual int main(kit* tk,int argc,char** argv);
+};
+ 
+ 
+application::application(int argc,char** argv) : session(argc,argv,"MM1queue")
+{
+}
+ 
+int application::main(kit* tk,int argc,char* argv[])
+{
+  sim = new simulation();
+  h = new histogram(".h","-start 0.5 -columnwidth 0.5 -title timespent");
+  q = new queue();
+  loket = new resource(1);
+
+  customer* c = new customer(ARRIVAL);
+  sim -> schedule(c,0.0);     // initially a customer arrives
+  server* s = new server();
+  sim -> hold(s);             // and the server is conditional
+
+  sim -> run(80.0);             // run for 80 time units
+
+  delete h;
+  delete q;
+  delete sim;
+  return 0;
+}
+ 
+// create and start the session
+ 
+int main(int argc,char** argv)
+{
+  session* s = new application(argc,argv);
+  s -> run();
+  exit(0);
+}
+.fi
+.SH REMARKS
+A process-oriented M/M/1 queue. A customer arrives at
+or departs from a queue. If arriving, a new customer
+is scheduled, report is set, and the customer is appended
+to the queue. If departing, the customer is terminated and
+the loket is released. The server takes the first customer,
+acquires a loket and schedules departure. Notice that the
+server is made conditional and that it is never passivated, 
+so it exists for the entire simulation, and is invoked
+whenever a customer is activated.
+See event for an event-based M/M/1 queue.
+.SH SEE ALSO
+event(6), simulation(6), resource(6), queue(6),
+generator(6), histogram(6).

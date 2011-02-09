@@ -1,0 +1,34 @@
+.TH SIMULATIONCLOCK 2
+.SH NAME
+   simulationclock.
+.SH SYNOPSIS
+.nf
+interface simulationclock : public screen
+{
+  simulationclock(char* p,char* options = "");
+  simulationclock(widget* w,char* p,char* options = "");
+  virtual ~simulationclock();
+};
+.fi
+.SH DESCRIPTION
+Creating this widget results in a clock that is updated to the current
+simulation time every time an event is activated.
+.SH OPTIONS
+.nf
+  -foreground <color = white>
+  -background <color = white>
+  -width <coord = 200>    // width/200 == height/60
+  -height <coord = 60>
+.fi
+.SH EXAMPLE
+.nf
+  toplevel* t = new toplevel(".clock");
+  simulationclock* s = new simulationclock(t,".c");
+  tk -> pack(s);
+  tk -> update();
+.fi
+.SH REMARKS
+This as an addition to application::main would add an extra clock
+widget.
+.SH SEE ALSO
+   kit(4), toplevel(4), screen(6)

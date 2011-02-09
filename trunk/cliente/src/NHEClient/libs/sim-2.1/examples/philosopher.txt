@@ -1,0 +1,24 @@
+The problem :
+
+Five philosophers sit around a table, with five chopsticks in between.
+They thin k and if they're hungry and if two chopsticks are available, 
+they eat. If a philosopher gets hungry and s/he can't acquire a 
+chopstick, the philosopher waits until s/he can. The philosopher doesn't
+think, if s/he is waiting or eating. We're interested in the percentage
+of the time, that a philosopher actually thinks. 
+
+The problem :
+
+To model this problem, three events can be identified, eat ,think and 
+await. These events can be combined in an entity philosopher.
+Furthermore we need a chopstick for every philosopher. These will be 
+represented as a resource. The thinking times will be gathered in an 
+instance of the class histogram and the generator takes care of the
+variations in the time need to think and eat.
+All the eat event does is the scheduling of a think event after the
+eating time. The think event releases the chopsticks, makes a sample
+of the thinking time and schedules an await event after this thinking
+time. The await event acquires the chopsticks, passivates the await
+event and schedules an eat event immediately, if both chopsticks are
+available. If not, the await event is made conditional as it may
+execute in the future.

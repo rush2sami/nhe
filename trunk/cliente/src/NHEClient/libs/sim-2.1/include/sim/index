@@ -1,0 +1,5 @@
+<h2>Include -- sim</h2>
+ 
+<control>
+<exec cmd="ls *.h | list-html" file=idx.html>
+</control>

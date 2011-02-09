@@ -1,0 +1,26 @@
+The most convenient way is to obtain hush
+and install sim as a package under hush.
+If you don't have hush, then
+
+1. Modify local.mk to indicate the install directory.
+   This is the HUSH variable.
+
+2. Replace the include in Makefile by 
+
+   include local.mk
+
+3. And similarly for resource.mk. Note that
+   resource.mk is include one directory below,
+   that is src (and possibly ascii).
+
+4. Change in src/Makefile the CFLAGS as indicated
+   to CFLAGS += -DASCII
+
+5. Then type make install, or make build
+   to test.
+
+Warning:
+	This procedure of installation has not been tested
+	extensively.
+
+eliens@cs.vu.nl
