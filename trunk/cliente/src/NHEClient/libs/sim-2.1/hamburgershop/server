@@ -1,3 +1,0 @@
-SERVER=`/bin/uname -n`
-echo "Starting hamburgershop server on host $SERVER"
-set -x; /home/hush/examples/hamburgershop/server-hamburgershop.out

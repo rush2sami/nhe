@@ -1,3 +1,0 @@
-SERVER=europe
-echo "Starting hamburgershop client. Connecting to server running on  $SERVER"
-set -x; /home/hush/examples/hamburgershop/client-hamburgershop.out -$SERVER
