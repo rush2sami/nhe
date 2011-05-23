@@ -1,0 +1,1 @@
+package model.bd.per{	import marcozero.marzsdk.bd.MZOperators;	import marcozero.marzsdk.bd.IMZTable;	public interface IPerfil extends IMZTable	{		function set per_identificador(value:Number):void;		function set per_descricao(value:Number):void;		function get per_identificador():Number;		function get per_descricao():Number;	}}

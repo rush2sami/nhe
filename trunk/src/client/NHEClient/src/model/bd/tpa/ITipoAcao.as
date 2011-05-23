@@ -1,0 +1,1 @@
+package model.bd.tpa{	import marcozero.marzsdk.bd.MZOperators;	import marcozero.marzsdk.bd.IMZTable;	public interface ITipoAcao extends IMZTable	{		function set tpa_identificador(value:Number):void;		function set tpa_nome(value:Number):void;		function get tpa_identificador():Number;		function get tpa_nome():Number;	}}
