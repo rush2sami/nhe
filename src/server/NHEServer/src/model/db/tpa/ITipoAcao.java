@@ -1,0 +1,1 @@
+package model.db.tpa;import model.db.ITable;	public interface ITipoAcao extends ITable{	void set_tpa_identificador(int value);	void set_tpa_nome(String value);	int get_tpa_identificador();	String get_tpa_nome();}
