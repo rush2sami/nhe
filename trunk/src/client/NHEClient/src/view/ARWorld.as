@@ -40,7 +40,6 @@ package view
 	public class ARWorld extends Sprite
 	{
 		private var listViews:Vector.<View3D>;
-		private var view:View3D;
 		private var plane:Plane;
 		private var material:BitmapMaterial;
 		private var webcam:Camera;
@@ -51,7 +50,12 @@ package view
 		
 		public function ARWorld()
 		{
-			
+			if(stage) init();
+			else addEventListener(Event.ADDED_TO_STAGE, init);
+		}
+		public function init(e:Event = null):void
+		{
+			removeEventListener(Event.ADDED_TO_STAGE, init);
 			listViews = new Vector.<View3D>();
 			var scene:Scene3D = new Scene3D();
 			
