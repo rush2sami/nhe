@@ -126,4 +126,11 @@ public class Table implements ITable
 	@Override
 	public int get_identificador() {
 		return 0;
-	}}
+	}
+
+	@Override
+	public int compareTo(ITable o) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+}

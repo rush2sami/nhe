@@ -1,18 +1,1 @@
-package model.bd.pro{	import model.bd.aca.IAcao;	import marcozero.marzsdk.bd.MZOperators;	import marcozero.marzsdk.bd.IMZTable;	import flash.utils.getQualifiedClassName;	public class Projeto implements IProjeto{		private var _pro_identificador:Number;		private var _pro_titulo:Number;		private var _pro_descricao:Number;		private var _pro_basico:Number;		private var _pro_finalizado:Number;		private var _aca_identificador:IAcao;		public function Projeto(){}		public function get pro_identificador():Number		{			return _pro_identificador;		}		public function get pro_titulo():Number		{			return _pro_titulo;		}		public function get pro_descricao():Number		{			return _pro_descricao;		}		public function get pro_basico():Number		{			return _pro_basico;		}		public function get pro_finalizado():Number		{			return _pro_finalizado;		}		public function get aca_identificador():IAcao		{			return _aca_identificador;		}		public function set pro_identificador(value:Number):void		{			this._pro_identificador=value;		}		public function set pro_titulo(value:Number):void		{			this._pro_titulo=value;		}		public function set pro_descricao(value:Number):void		{			this._pro_descricao=value;		}		public function set pro_basico(value:Number):void		{			this._pro_basico=value;		}		public function set pro_finalizado(value:Number):void		{			this._pro_finalizado=value;		}		public function set aca_identificador(value:IAcao):void		{			this._aca_identificador=value;		}		public function get identificador():Number		{			return pro_identificador;		}		public function matches(elemento:IMZTable):Boolean
-		{
-			if(getQualifiedClassName(elemento) == getQualifiedClassName(this))
-			{
-				if(IMZTable(elemento).identificador == identificador)
-					return true;
-				else
-					return false;
-			}
-			else
-			{
-				return false;
-			}
-		}
-		public function matchesAll(elemento:IMZTable, operacao:Boolean, operadores:Object):Boolean
-		{
-			return MZOperators.matchesAll(this,elemento,operacao,operadores);
-		}	}}
+package model.db.pro;import model.db.Table;import model.db.aca.IAcao;public class Projeto extends Table implements IProjeto{	private int pro_identificador;	private String pro_titulo;	private String pro_descricao;	private int pro_basico;	private int pro_finalizado;	private IAcao aca_identificador;		public Projeto(){}		@Override	public IAcao get_aca_identificador() {		// TODO Auto-generated method stub		return this.aca_identificador;	}	@Override	public int get_pro_basico() {		// TODO Auto-generated method stub		return this.pro_basico;	}	@Override	public String get_pro_descricao() {		// TODO Auto-generated method stub		return this.pro_descricao;	}	@Override	public int get_pro_finalizado() {		// TODO Auto-generated method stub		return this.pro_finalizado;	}	@Override	public int get_pro_identificador() {		// TODO Auto-generated method stub		return this.pro_identificador;	}	@Override	public String get_pro_titulo() {				return this.pro_titulo;	}	@Override	public void set_aca_identificador(IAcao value) {		this.aca_identificador = value;			}	@Override	public void set_pro_basico(int value) {		this.pro_basico = value;			}	@Override	public void set_pro_descricao(String value) {		this.pro_descricao = value;			}	@Override	public void set_pro_finalizado(int value) {		this.pro_finalizado = value;			}	@Override	public void set_pro_identificador(int value) {		this.pro_identificador = value;			}	@Override	public void set_pro_titulo(String value){		this.pro_titulo = value;			}}
