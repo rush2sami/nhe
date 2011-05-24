@@ -1,17 +1,16 @@
-package model.bd
+package model.db;
+
+public class Procedures
 {
-	public class Procedures
+	public static final int PROCURAR_ACA = 1;
+	public static final int PROCURAR_CMP = 2;
+	public static final int PROCURAR_PER = 3;
+	public static final int PROCURAR_PRO = 4;
+	public static final int PROCURAR_PTC = 5;
+	public static final int PROCURAR_TPA = 6;
+	public static final int PROCURAR_USU = 7;
+	
+	public Procedures()
 	{
-		public static const PROCURAR_ACA:Number = 1;
-		public static const PROCURAR_CMP:Number = 2;
-		public static const PROCURAR_PER:Number = 3;
-		public static const PROCURAR_PRO:Number = 4;
-		public static const PROCURAR_PTC:Number = 5;
-		public static const PROCURAR_TPA:Number = 6;
-		public static const PROCURAR_USU:Number = 7;
-		
-		public function Procedures()
-		{
-		}
 	}
 }
