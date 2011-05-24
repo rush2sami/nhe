@@ -38,7 +38,6 @@ public class Table implements ITable
 	@Override
 	public Boolean matchesAll(ITable element, Boolean operation,
 			HashMap<String, Integer> operators) throws IllegalArgumentException, IllegalAccessException, InvocationTargetException {
-		// TODO Auto-generated method stub
 		// Só compara se forem de tabelas iguais
 		if(getClass().equals(element.getClass()))
 		{
