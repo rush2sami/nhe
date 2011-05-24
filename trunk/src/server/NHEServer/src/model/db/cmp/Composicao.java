@@ -1,18 +1,1 @@
-package model.bd.cmp{	import flash.utils.getQualifiedClassName;		import marcozero.marzsdk.bd.IMZTable;	import marcozero.marzsdk.bd.MZOperators;		import model.bd.pro.IProjeto;		public class Composicao implements IComposicao	{		private var _cmp_identificador:Number;		private var _pro_componente:IProjeto;		private var _pro_projeto:IProjeto;		private var _cmp_atual:Number;				public function Composicao()		{		}				public function get cmp_identificador():Number		{			return _cmp_identificador;		}		public function get pro_componente():IProjeto		{			return _pro_componente;		}		public function get pro_projeto():IProjeto		{			return _pro_projeto;		}		public function get cmp_atual():Number		{			return _cmp_atual;		}		public function set cmp_identificador(value:Number):void		{			this._cmp_identificador=value;		}		public function set pro_componente(value:IProjeto):void		{			this._pro_componente=value;		}		public function set pro_projeto(value:IProjeto):void		{			this._pro_projeto=value;		}		public function set cmp_atual(value:Number):void		{			this._cmp_atual=value;		}		public function get identificador():Number		{			return cmp_identificador;		}		public function matches(elemento:IMZTable):Boolean
-		{
-			if(getQualifiedClassName(elemento) == getQualifiedClassName(this))
-			{
-				if(IMZTable(elemento).identificador == identificador)
-					return true;
-				else
-					return false;
-			}
-			else
-			{
-				return false;
-			}
-		}
-		public function matchesAll(elemento:IMZTable, operacao:Boolean, operadores:Object):Boolean
-		{
-			return MZOperators.matchesAll(this,elemento,operacao,operadores);
-		}	}}
+package model.db.cmp;import model.db.Table;import model.db.pro.IProjeto;	public class Composicao extends Table implements IComposicao{	private int cmp_identificador;	private IProjeto pro_componente;	private IProjeto pro_projeto;	private int cmp_atual;		public Composicao()	{	}		@Override	public int get_cmp_atual() {		return this.cmp_atual;	}	@Override	public int get_cmp_identificador() {		return this.cmp_identificador;	}	@Override	public IProjeto get_pro_componente() {		return this.pro_componente;	}	@Override	public IProjeto get_pro_projeto() {		return this.pro_projeto;	}	@Override	public void set_cmp_atual(int value) {		this.cmp_atual = value;			}	@Override	public void set_cmp_identificador(int value) {		this.cmp_identificador = value;			}	@Override	public void set_pro_componente(IProjeto value) {		this.pro_componente = value;			}	@Override	public void set_pro_projeto(IProjeto value) {		this.pro_projeto = value;			}}

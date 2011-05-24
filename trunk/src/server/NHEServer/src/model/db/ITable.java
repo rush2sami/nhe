@@ -3,7 +3,7 @@ package model.db;
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 
-public interface ITable
+public interface ITable extends Comparable<ITable>
 {
 	int get_identificador();
 	Boolean matches(ITable elemento);
