@@ -26,6 +26,9 @@
       </libraryPathEntry>
       <libraryPathEntry kind="3" linkType="1" path="/Away3D/bin/Away3D.swc" useDefaultLinkType="false"/>
       <libraryPathEntry kind="3" linkType="1" path="/MarzSDK/bin/MarzSDK.swc" useDefaultLinkType="false"/>
+      <libraryPathEntry kind="3" linkType="1" path="libs/ASFEAT.swc" useDefaultLinkType="false"/>
+      <libraryPathEntry kind="3" linkType="1" path="/NResponder/bin/NResponder.swc" useDefaultLinkType="false"/>
+      <libraryPathEntry kind="3" linkType="1" path="libs/apparat.swc" useDefaultLinkType="false"/>
     </libraryPath>
     <sourceAttachmentPath/>
   </compiler>
