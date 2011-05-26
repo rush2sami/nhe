@@ -18,6 +18,7 @@ public class EventDispatcher implements IEventDispatcher
 	{
 		if(target == null)
 			target = this;
+		this.prl_listeners = new Vector<EventListener>();
 	}
 	
 	@Override
@@ -43,7 +44,8 @@ public class EventDispatcher implements IEventDispatcher
 	@Override
 	public void addEventListener(String type, Object object, Method listener,
 			Boolean useCapture, int priority, Boolean useWeakReference) {
-		prl_listeners.add(new EventListener(type, object, listener, useCapture, priority, useWeakReference));
+		EventListener eventListener = new EventListener(type, object, listener, useCapture, priority, useWeakReference);
+		prl_listeners.add(eventListener);
 	}
 
 	@Override
