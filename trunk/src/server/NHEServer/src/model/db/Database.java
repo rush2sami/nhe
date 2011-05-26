@@ -1,10 +1,10 @@
 package model.db;
 
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
-import java.util.Dictionary;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -80,7 +80,6 @@ public class Database
 		Class<? extends Table> classe = classes.get(nome);
 		String prefix = prefixos.get(nome);
 		
-		ITable objRef = classe.newInstance();
 		result.beforeFirst();
 		while(result.next())
 		{
@@ -96,10 +95,14 @@ public class Database
 					Class<? extends Table> outraClasse = classes.get(nomeFromPrefixo(prefixo));
 					ITable outroObj = outraClasse.newInstance();
 					outraClasse.getMethod("set_" + prefixo + "_identificador").invoke(outroObj, result.getInt(prefixo + "_identificador"));
+					
+					outroObj = repositorios.get(nome).adicionarComCuidado(outroObj);
+					classe.getMethod("set_" + metaData.getColumnName(i)).invoke(objTmp, outroObj);
 				}
 				else
 				{
-					
+					Method method = classe.getMethod("set_" + metaData.getColumnName(i));
+					classe.getMethod("set_" + metaData.getColumnName(i)).invoke(objTmp, method.getParameterTypes()[0].cast(result.getObject(i)));
 				}
 				
 			}

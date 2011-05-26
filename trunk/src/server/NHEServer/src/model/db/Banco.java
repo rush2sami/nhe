@@ -1,45 +1,51 @@
-package model.bd
+package model.db;
+
+import model.db.aca.Acao;
+import model.db.cmp.Composicao;
+import model.db.per.Perfil;
+import model.db.pro.Projeto;
+import model.db.ptc.Participacao;
+import model.db.tpa.TipoAcao;
+import model.db.usu.Usuario;
+
+public class Banco extends Database
 {
-	import marcozero.marzsdk.bd.MZDatabase;
-	import model.bd.aca.Acao;
-	import model.bd.cmp.Composicao;
-	import model.bd.per.Perfil;
-	import model.bd.pro.Projeto;
-	import model.bd.ptc.Participacao;
-	import model.bd.tpa.TipoAcao;
-	import model.bd.usu.Usuario;
-	public class Banco extends MZDatabase
+	private static Banco banco;
+	public static final String ACA = "aca";
+	public static final String CMP = "cmp";
+	public static final String PER = "per";
+	public static final String PRO = "pro";
+	public static final String PTC = "ptc";
+	public static final String TPA = "tpa";
+	public static final String USU = "usu";
+	public static final String ACAO_STR = "Acao";
+	public static final String COMPOSICAO_STR = "Composicao";
+	public static final String PERFIL_STR = "Perfil";
+	public static final String PROJETO_STR = "Projeto";
+	public static final String PARTICIPACAO_STR = "Participacao";
+	public static final String TIPOACAO_STR = "TipoAcao";
+	public static final String USUARIO_STR = "Usuario";
+	public static final Class<? extends Table> ACAO = Acao.class;
+	public static final Class<? extends Table> COMPOSICAO = Composicao.class;
+	public static final Class<? extends Table> PERFIL = Perfil.class;
+	public static final Class<? extends Table> PROJETO = Projeto.class;
+	public static final Class<? extends Table> PARTICIPACAO = Participacao.class;
+	public static final Class<? extends Table> TIPOACAO = TipoAcao.class;
+	public static final Class<? extends Table> USUARIO = Usuario.class;
+	private Banco()
 	{
-		public static const ACA:String = "aca";
-		public static const CMP:String = "cmp";
-		public static const PER:String = "per";
-		public static const PRO:String = "pro";
-		public static const PTC:String = "ptc";
-		public static const TPA:String = "tpa";
-		public static const USU:String = "usu";
-		public static const ACAO_STR:String = "Acao";
-		public static const COMPOSICAO_STR:String = "Composicao";
-		public static const PERFIL_STR:String = "Perfil";
-		public static const PROJETO_STR:String = "Projeto";
-		public static const PARTICIPACAO_STR:String = "Participacao";
-		public static const TIPOACAO_STR:String = "TipoAcao";
-		public static const USUARIO_STR:String = "Usuario";
-		public static const ACAO:Class = Acao;
-		public static const COMPOSICAO:Class = Composicao;
-		public static const PERFIL:Class = Perfil;
-		public static const PROJETO:Class = Projeto;
-		public static const PARTICIPACAO:Class = Participacao;
-		public static const TIPOACAO:Class = TipoAcao;
-		public static const USUARIO:Class = Usuario;
-		public function Banco()
-		{
-			criarRepositorio(ACA,ACAO_STR,ACAO);
-			criarRepositorio(CMP,COMPOSICAO_STR,COMPOSICAO);
-			criarRepositorio(PER,PERFIL_STR,PERFIL);
-			criarRepositorio(PRO,PROJETO_STR,PROJETO);
-			criarRepositorio(PTC,PARTICIPACAO_STR,PARTICIPACAO);
-			criarRepositorio(TPA,TIPOACAO_STR,TIPOACAO);
-			criarRepositorio(USU,USUARIO_STR,USUARIO);
-		}
+		criarRepositorio(ACA,ACAO_STR,ACAO);
+		criarRepositorio(CMP,COMPOSICAO_STR,COMPOSICAO);
+		criarRepositorio(PER,PERFIL_STR,PERFIL);
+		criarRepositorio(PRO,PROJETO_STR,PROJETO);
+		criarRepositorio(PTC,PARTICIPACAO_STR,PARTICIPACAO);
+		criarRepositorio(TPA,TIPOACAO_STR,TIPOACAO);
+		criarRepositorio(USU,USUARIO_STR,USUARIO);
+	}
+	public Banco getInstance()
+	{
+		if(banco == null)
+			banco = new Banco();
+		return banco;
 	}
 }
