@@ -70,12 +70,14 @@ public class ServerController extends EventDispatcher
 	public void server_start() throws IllegalArgumentException, IllegalAccessException, InvocationTargetException
 	{
 		prb_running = true;
+		pro_executor_service.execute(pro_server_thread);
 		dispatchEvent(new ServerEvent(ServerEvent.SERVER_STARTED));
 	}
 	
 	public void server_stop() throws IllegalArgumentException, IllegalAccessException, InvocationTargetException
 	{
 		prb_running = false;
+		pro_executor_service.shutdownNow();
 		dispatchEvent(new ServerEvent(ServerEvent.SERVER_STOPPED));
 	}
 	
