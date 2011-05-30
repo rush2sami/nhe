@@ -46,7 +46,6 @@ public class ServerController extends EventDispatcher
 	{
 		super();
 		this.pro_server_socket = new ServerSocket(PORT);
-		this.pro_server_widget = new ServerWidget();
 		this.prl_client_controllers = new Vector<ClientController>();
 		this.pro_server_thread = new ServerThread(this.pro_server_socket);
 		this.pro_server_thread.addEventListener(ServerEvent.USER_CONNECTED, this, getClass().getMethod("server_user_connected_event", ServerEvent.class));
@@ -120,5 +119,22 @@ public class ServerController extends EventDispatcher
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+
+	public void client_disconnect(int vrn_usu_identificador)
+	{
+		
+		
+	}
+	
+	public void widget_show()
+	{
+		if(this.pro_server_widget == null)
+			this.pro_server_widget = new ServerWidget("NHE Administração");
+		 java.awt.EventQueue.invokeLater(new Runnable() {
+	            public void run() {
+	                pro_server_widget.setVisible(true);
+	            }
+	        });
 	}
 }
