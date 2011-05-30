@@ -1,5 +1,7 @@
 package
 {
+	import appkit.responders.NResponder;
+	
 	import flash.display.Sprite;
 	
 	import view.ARWorld;
@@ -9,6 +11,7 @@ package
 		private var arworld:ARWorld;
 		public function NHEClient()
 		{
+			
 			arworld = new ARWorld();
 			addChild(arworld);
 		}

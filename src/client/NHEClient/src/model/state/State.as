@@ -1,23 +1,24 @@
 package model.state
 {
-	import flash.display.Sprite;
-	import flash.events.EventDispatcher;
+	import appkit.responders.NResponder;
 	
-	import model.bd.aca.Acao;
+	import model.bd.act.Action;
 	import model.errors.StateError;
-	import model.events.StateEvent;
 
 	
-	[Event(name="added", type="model.events.StateEvent")]
-	[Event(name="removed", type="model.events.StateEvent")]
-	[Event(name="action_changed", type="model.events.StateEvent")]
+	[Event(name="added", type="model.state.State")]
+	[Event(name="removed", type="model.state.State")]
+	[Event(name="action_changed", type="model.state.State")]
 	
-	public class State extends EventDispatcher
+	public class State
 	{
-		private var pro_parent:State;
-		private var prl_children:Vector.<State>;
+		public static const REMOVED:String = "REMOVED";
+		public static const ADDED:String = "ADDED";
+		public static const ACTION_CHANGED:String = "ACTION_CHANGED";
 		
-		private var _pao_action:Acao;
+		private var _pro_parent:State;
+		private var prl_children:Vector.<State>;
+		private var _pao_action:Action;
 		
 		public function State()
 		{
@@ -37,7 +38,6 @@ package model.state
 			}
 			prl_children.push(child);
 			child.pro_parent = this;
-			child.dispatchEvent(new StateEvent(StateEvent.ADDED));
 		}
 		
 		/**
@@ -54,7 +54,6 @@ package model.state
 			}
 			prl_children.splice(index,0,child);
 			child.pro_parent = this;
-			child.dispatchEvent(new StateEvent(StateEvent.ADDED));
 		}
 		
 		/**
@@ -71,7 +70,6 @@ package model.state
 				var child:State = prl_children[index];
 				prl_children.splice(index,1);
 				child.pro_parent = null;
-				child.dispatchEvent(new StateEvent(StateEvent.REMOVED));
 			}
 		}
 		
@@ -87,7 +85,6 @@ package model.state
 			{
 				prl_children.splice(prl_children.indexOf(child),1);
 				child.pro_parent = null;
-				child.dispatchEvent(new StateEvent(StateEvent.REMOVED));
 			}
 		}
 		
@@ -209,7 +206,7 @@ package model.state
 		 * @return 
 		 * 
 		 */
-		public function searchFromAction(action:Acao):State
+		public function searchFromAction(action:Action):State
 		{
 			if(pao_action == action) return this;
 			else if(prl_children.length == 0) return null;
@@ -217,7 +214,7 @@ package model.state
 			{
 				for(var i:uint = 0; i < prl_children.length; i++)
 				{
-					var actionChild:Acao = prl_children[i].searchFromAction(action);
+					var actionChild:Action = prl_children[i].searchFromAction(action);
 					if(actionChild != null) return actionChild; 
 				}
 				return null;
@@ -249,7 +246,7 @@ package model.state
 		 * @return 
 		 * 
 		 */
-		public function get pao_action():Acao
+		public function get pao_action():Action
 		{
 			return _pao_action;
 		}
@@ -259,10 +256,24 @@ package model.state
 		 * @param value
 		 * 
 		 */		
-		public function set pao_action(value:Acao):void
+		public function set pao_action(value:Action):void
 		{
 			_pao_action = value;
-			dispatchEvent(new StateEvent(StateEvent.ACTION_CHANGED));
+			NResponder.dispatch(ACTION_CHANGED,[this]);
+		}
+
+		public function get pro_parent():State
+		{
+			return _pro_parent;
+		}
+
+		public function set pro_parent(value:State):void
+		{
+			_pro_parent = value;
+			if(value != null)
+				NResponder.dispatch(ADDED,[this]);
+			else
+				NResponder.dispatch(REMOVED,[this]);
 		}
 	}
 }
