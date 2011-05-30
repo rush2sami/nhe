@@ -1,13 +1,10 @@
 package controller.state
 {
-	import flash.events.EventDispatcher;
-	import flash.events.IEventDispatcher;
-	
-	public class StateController extends EventDispatcher
+	public class StateController
 	{
-		public function StateController(target:IEventDispatcher=null)
+		public function StateController()
 		{
-			super(target);
+
 		}
 	}
 }

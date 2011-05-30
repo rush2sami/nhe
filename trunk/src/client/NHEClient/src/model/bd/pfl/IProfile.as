@@ -1,0 +1,1 @@
+package model.bd.pfl{	import marcozero.marzsdk.bd.MZOperators;	import marcozero.marzsdk.bd.IMZTable;	public interface IProfile extends IMZTable	{		function set pfl_identificador(value:Number):void;		function set pfl_descricao(value:Number):void;		function get pfl_identificador():Number;		function get pfl_descricao():Number;	}}
