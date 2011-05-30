@@ -16,7 +16,8 @@ public class NheServer
 	{
 		try {
 			serverController = ServerController.getInstance();
-			serverController.server_start();
+			//serverController.server_start();
+			serverController.widget_show();
 		} catch (SecurityException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
@@ -27,9 +28,5 @@ public class NheServer
 			ServerController.trace("Couldn't start server: " + e.toString());
 			e.printStackTrace();
 		}
-		
-		
-
 	}
-
 }
