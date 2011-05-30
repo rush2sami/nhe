@@ -2,7 +2,7 @@ package model.state
 {
 	import appkit.responders.NResponder;
 	
-	import model.bd.act.Action;
+	import model.db.act.Action;
 	import model.errors.StateError;
 
 	

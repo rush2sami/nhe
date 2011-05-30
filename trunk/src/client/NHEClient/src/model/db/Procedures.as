@@ -1,4 +1,4 @@
-package model.bd
+package model.db
 {
 	public class Procedures
 	{

@@ -1,13 +1,13 @@
-package model.bd
+package model.db
 {
 	import marcozero.marzsdk.bd.MZDatabase;
-	import model.bd.act.Action;
-	import model.bd.cmp.Composition;
-	import model.bd.pfl.Profile;
-	import model.bd.pro.Project;
-	import model.bd.ptc.Participation;
-	import model.bd.atp.ActionType;
-	import model.bd.usr.User;
+	import model.db.act.Action;
+	import model.db.cmp.Composition;
+	import model.db.pfl.Profile;
+	import model.db.pro.Project;
+	import model.db.ptc.Participation;
+	import model.db.atp.ActionType;
+	import model.db.usr.User;
 	public class Database extends MZDatabase
 	{
 		public static const ACT:String = "acr";
