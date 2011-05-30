@@ -1,1 +1,0 @@
-package model.bd.atp{	import marcozero.marzsdk.bd.MZOperators;	import marcozero.marzsdk.bd.IMZTable;	public interface IActionType extends IMZTable	{		function set atp_identificador(value:Number):void;		function set atp_nome(value:Number):void;		function get atp_identificador():Number;		function get atp_nome():Number;	}}

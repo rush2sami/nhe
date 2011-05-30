@@ -9,11 +9,12 @@ package model.server
 	{
 		private var _pan_id:Number;
 		private var _pan_usr_identificador:Number;
-		private var _pas_func:String;
+		private var _pas_func:Number;
 		private var _pal_parameters:Vector.<String>;
 		
 		public function ServerRequest()
 		{
+			
 		}
 		
 		/*------------------------------------
@@ -25,12 +26,12 @@ package model.server
 		/*------------------------------------
 		 * PROPERTIES
 		 *-----------------------------------*/
-		public function get pas_func():String
+		public function get pas_func():Number
 		{
 			return _pas_func;
 		}
 
-		public function set pas_func(value:String):void
+		public function set pas_func(value:Number):void
 		{
 			_pas_func = value;
 		}
@@ -65,6 +66,12 @@ package model.server
 			_pan_usr_identificador = value;
 		}
 
+		public function get text():String
+		{
+			return String(_pan_id) + ServerDefaults.SEPARATOR_FIELDS +
+				   isNaN(_pan_usr_identificador)?"":String(_pan_usr_identificador) + String(_pas_func) + ServerDefaults.SEPARATOR_FIELDS + 
+				   String(_pal_parameters.join(ServerDefaults.SEPARATOR_FIELDS));
+		}
 		
 		/*------------------------------------
 		* PRIVATE METHODS
