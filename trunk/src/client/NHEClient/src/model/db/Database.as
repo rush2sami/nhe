@@ -1,13 +1,15 @@
 package model.db
 {
-	import marcozero.marzsdk.bd.MZDatabase;
+	import marcozero.marzsdk.net.db.MZDatabase;
+	
 	import model.db.act.Action;
+	import model.db.atp.ActionType;
 	import model.db.cmp.Composition;
 	import model.db.pfl.Profile;
 	import model.db.pro.Project;
 	import model.db.ptc.Participation;
-	import model.db.atp.ActionType;
 	import model.db.usr.User;
+	
 	public class Database extends MZDatabase
 	{
 		public static const ACT:String = "acr";
@@ -31,8 +33,10 @@ package model.db
 		public static const PARTICIPATION:Class = Participation;
 		public static const ACTIONTYPE:Class = ActionType;
 		public static const USER:Class = User;
+		
 		public function Database()
 		{
+			super();
 			criarRepositorio(ACT,ACTION_STR,ACTION);
 			criarRepositorio(CMP,COMPOSITION_STR,COMPOSITION);
 			criarRepositorio(PFL,PROFILE_STR,PROFILE);
@@ -40,6 +44,11 @@ package model.db
 			criarRepositorio(PTC,PARTICIPATION_STR,PARTICIPATION);
 			criarRepositorio(ATP,ACTIONTYPE_STR,ACTIONTYPE);
 			criarRepositorio(USR,USER_STR,USER);
+		}
+		
+		public static function get instance():Database
+		{
+			return _instance as Database;
 		}
 	}
 }

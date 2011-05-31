@@ -1,5 +1,6 @@
 package controller
 {
+	import controller.db.DBController;
 	import controller.server.ServerController;
 	import controller.world.WorldController;
 	
@@ -15,6 +16,7 @@ package controller
 		// Controllers
 		private var pro_server_controller:ServerController;
 		private var pro_world_controller:WorldController;
+		private var pro_db_controller:DBController;
 		
 		/*------------------------------------
 		* 			PUBLIC METHODS
@@ -44,8 +46,11 @@ package controller
 		private function create_controllers():void
 		{
 			pro_server_controller = new ServerController();
+			pro_server_controller.setup();
 			pro_world_controller = new WorldController(stage);
-			pro_db_controller = new db
+			pro_world_controller.setup();
+			pro_db_controller = new DBController();
+			pro_db_controller.setup();
 		}
 		
 

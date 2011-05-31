@@ -6,6 +6,7 @@ package controller.server
 	import flash.events.Event;
 	import flash.events.IOErrorEvent;
 	import flash.net.Socket;
+	import flash.net.sendToURL;
 	
 	import model.server.ServerConnection;
 	import model.server.ServerDefaults;
@@ -16,9 +17,21 @@ package controller.server
 	{
 		private var _prn_server_connection:ServerConnection;
 		
+		private static var _instance:ServerController = new ServerController();
+		
 		public function ServerController()
 		{
-			
+			if(_instance) throw new Error("Singleton on ServerController");
+		}
+		
+		public static function get instance():ServerController
+		{
+			return _instance;
+		}
+		
+		public function setup():void
+		{
+			_prn_server_connection = new ServerConnection(ServerDefaults.HOST, ServerDefaults.PORT);
 		}
 		
 		public function get prn_server_connection():ServerConnection
@@ -28,21 +41,13 @@ package controller.server
 
 		public function connect():void
 		{
-			if(_prn_server_connection == null)
-			{
-				_prn_server_connection = new ServerConnection(ServerDefaults.HOST, ServerDefaults.PORT);
-				
-				NResponder.addNative(_prn_server_connection, Event.CONNECT			, server_connection_connect_event);
-				NResponder.addNative(_prn_server_connection, IOErrorEvent.IO_ERROR	, server_connection_ioerror_event);
-				NResponder.addNative(_prn_server_connection, DataEvent.DATA			, server_connection_data_event);
-				NResponder.addNative(_prn_server_connection, Event.CLOSE			, server_connection_close_event);
-			}
+			
 			_prn_server_connection.connect();
 		}
 		
 		public function disconnect():void
 		{
-			
+			_prn_server_connection.disconnect();
 		}
 		
 		public function request_send(request:ServerRequest):void
@@ -50,25 +55,22 @@ package controller.server
 			prn_server_connection.send(request);
 		}
 		
-		private function server_connection_connect_event(e:Event):void
+		public function get hasResponse():Boolean
 		{
-			
+			return prn_server_connection.prl_responses.length > 0;
 		}
 		
-		private function server_connection_ioerror_event(e:IOErrorEvent):void
+		public function nextResponse(removing:Boolean = true):ServerResponse
 		{
-			
+			if(removing) 
+				return prn_server_connection.prl_responses.shift();
+			else
+				return prn_server_connection.prl_responses[0];
 		}
 		
-		private function server_connection_data_event(e:DataEvent):void
+		public function process_requests():void
 		{
-			
+			prn_server_connection.sendMulti(prn_server_connection.prl_requests);
 		}
-		
-		private function server_connection_close_event(e:Event):void
-		{
-			
-		}
-		
 	}
 }
