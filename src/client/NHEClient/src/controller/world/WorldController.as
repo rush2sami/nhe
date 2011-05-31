@@ -25,6 +25,10 @@ package controller.world
 		{
 			return _prn_world_view;
 		}
-
+		
+		public function setup():void
+		{
+			create_world();
+		}
 	}
 }

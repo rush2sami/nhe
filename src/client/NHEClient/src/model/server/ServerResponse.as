@@ -2,15 +2,30 @@ package model.server
 {
 	public class ServerResponse
 	{
-		private var prn_response_id:Number;
-		private var prn_function_id:Number;
-		private var prn_parameters:Vector.<String>;
+		private var _prn_response_id:Number;
+		private var _prn_function_id:Number;
+		private var _prn_parameters:Vector.<String>;
 		
 		public function ServerResponse(data:String)
 		{
 			fill_response(data);
 		}
 		
+		public function get prn_parameters():Vector.<String>
+		{
+			return _prn_parameters;
+		}
+
+		public function get prn_function_id():Number
+		{
+			return _prn_function_id;
+		}
+
+		public function get prn_response_id():Number
+		{
+			return _prn_response_id;
+		}
+
 		/**
 		 * Fill the data of the response
 		 * Fill the response id
@@ -25,13 +40,13 @@ package model.server
 			var fields:Array = data.split(ServerDefaults.SEPARATOR_FIELDS);
 			
 			
-			prn_response_id = Number(fields[0]);
-			prn_function_id = Number(fields[i]);
+			_prn_response_id = Number(fields[0]);
+			_prn_function_id = Number(fields[i]);
 			
-			prn_parameters = new Vector.<String>();
+			_prn_parameters = new Vector.<String>();
 			for(var i:uint = 0; i < fields.length - 2; i++)
 			{
-				prn_parameters.push(fields[i+2]);
+				_prn_parameters.push(fields[i+2]);
 			}
 		}
 	}
