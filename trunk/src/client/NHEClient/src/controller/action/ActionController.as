@@ -2,6 +2,7 @@ package controller.action
 {
 	import appkit.responders.NResponder;
 	
+	import controller.augmentedreality.ARController;
 	import controller.db.DBController;
 	import controller.server.ServerController;
 	
@@ -11,15 +12,20 @@ package controller.action
 	import model.server.ServerDefaults;
 	import model.server.ServerRequest;
 	import model.server.ServerResponse;
+	
+	import ru.inspirit.asfeat.event.ASFEATDetectionEvent;
 
 	public class ActionController
 	{
 		private var pro_db_controller:DBController;
 		private var pro_server_controller:ServerController;
+		private var pro_ar_controller:ARController;
 		
-		public function ActionController()
+		public function ActionController(db_controller:DBController, server_controller:ServerController, ar_controller:ARController)
 		{
-			
+			this.pro_ar_controller = ar_controller;
+			this.pro_db_controller = db_controller;
+			this.pro_server_controller = server_controller;
 		}
 		
 		public function setup():void
@@ -29,8 +35,7 @@ package controller.action
 			NResponder.add(ServerConnection.SERVER_IO_ERROR, server_io_error_event);
 			NResponder.add(ServerConnection.SERVER_RECEIVED, server_received_event);
 			
-			pro_db_controller = new DBController();
-			pro_server_controller = new ServerController();
+			NResponder.add(ARController.DETECTED, arcontroller_detected_event);
 		}
 		
 		private function server_closed_event():void
@@ -89,6 +94,9 @@ package controller.action
 						break;
 				}
 			}
+		}
+		private function arcontroller_detected_event(e:ASFEATDetectionEvent):void
+		{
 		}
 	}
 }
