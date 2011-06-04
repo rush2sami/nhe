@@ -13,9 +13,9 @@ package controller.db
 		private var pro_server_controller:ServerController;
 		private var pro_database:Database;
 		
-		public function DBController()
+		public function DBController(server_controller:ServerController)
 		{
-			
+			this.pro_server_controller = server_controller;
 		}
 		
 		public function setup():void

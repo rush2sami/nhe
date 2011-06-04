@@ -7,14 +7,10 @@ package
 	import flash.display.Sprite;
 	import flash.events.Event;
 	
-	import view.ARWorld;
-	import view.NHEView;
-	
 	public class NHEClient extends Sprite
 	{
 		private var prn_nhe_controller:NHEController;
 		
-		//private var arworld:ARWorld;
 		public function NHEClient()
 		{
 			if(stage) init();
@@ -22,7 +18,13 @@ package
 		}
 		private function init(e:Event = null):void
 		{
+			NResponder.add(NHEController.CREATION_COMPLETE, nhecontroller_creation_complete_event);
 			prn_nhe_controller = new NHEController(this.stage);
+			prn_nhe_controller.setup();
+		}
+		
+		private function nhecontroller_creation_complete_event():void
+		{
 			prn_nhe_controller.start();
 		}
 	}
