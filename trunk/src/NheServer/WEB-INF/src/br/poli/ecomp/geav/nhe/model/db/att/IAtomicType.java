@@ -1,0 +1,1 @@
+package br.poli.ecomp.geav.nhe.model.db.att;import br.poli.ecomp.geav.nhe.model.db.ITable;	public interface IAtomicType extends ITable{	void set_att_identificador(int value);	void set_att_name(String value);	void set_att_description(String value);	int get_att_identificador();	String get_att_name();	String get_att_description();}

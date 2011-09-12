@@ -1,0 +1,1 @@
+package br.poli.ecomp.geav.nhe.model.db.mdl;import br.poli.ecomp.geav.nhe.model.db.ITable;	public interface IModel extends ITable{	void set_mdl_identificador(int value);	int get_mdl_identificador();}
